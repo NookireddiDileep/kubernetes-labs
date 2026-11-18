@@ -27,11 +27,11 @@ After completing this lab, you will be able to:
 | Component | Details |
 |------------|---------|
 | Kubernetes Distribution | K3s |
-| Kubernetes Version | v1.36.x |
+| Kubernetes Version | v1.36.2+k3s1 |
 | Operating System | Ubuntu 24.04 LTS |
 | Container Runtime | containerd |
 | Cloud Platform | Google Cloud Platform (GCP) |
-| Architecture | Single Node Control Plane |
+| Architecture | Single node (control plane and workloads) |
 
 ---
 
@@ -201,6 +201,8 @@ Pod Status = OOMKilled
 
 # 🛠️ Resolution
 
+> `oom-demo.yaml` in this folder is the **fixed** manifest (128Mi request, 256Mi limit). The broken version above used a 64Mi limit.
+
 Increase the configured memory resources.
 
 Updated manifest:
@@ -289,7 +291,7 @@ Verify Running State
 
 - Kubernetes enforces configured memory limits.
 - Exceeding the memory limit results in an `OOMKilled` termination.
-- Exit Code **137** typically indicates the Linux OOM Killer terminated the process.
+- Exit code **137** means SIGKILL; the `OOMKilled` reason is what proves it was memory.
 - Resource requests influence scheduling, while limits control maximum resource usage.
 - Proper resource sizing improves workload stability and cluster efficiency.
 
@@ -316,7 +318,7 @@ A container was terminated because it exceeded its configured memory limit.
 
 ### Q2. What is Exit Code 137?
 
-Exit Code **137** indicates the process was terminated by the Linux Out-Of-Memory (OOM) Killer.
+Exit code **137** = 128 + 9, i.e. the process was killed with **SIGKILL**. The OOM killer is one source of SIGKILL, so check the `Reason` field: `OOMKilled` confirms memory; other SIGKILLs (e.g. after a failed liveness probe's grace period) show different reasons.
 
 ---
 

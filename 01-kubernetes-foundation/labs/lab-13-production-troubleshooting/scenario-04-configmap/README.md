@@ -160,7 +160,7 @@ Create the missing ConfigMap.
 kubectl apply -f configmap.yaml
 ```
 
-Restart the Deployment.
+No restart is strictly needed: the kubelet keeps retrying a Pod in `CreateContainerConfigError`, so it starts on its own once the missing object exists. A restart just makes it immediate:
 
 ```bash
 kubectl rollout restart deployment configmap-demo
@@ -245,9 +245,9 @@ The imperative approach uses `kubectl` commands to perform an action immediately
 Example:
 
 ```bash
-kubectl create secret generic app-secret \
-  --from-literal=username=admin \
-  --from-literal=password=MySecurePassword123
+kubectl create configmap app-config \
+  --from-literal=APP_ENV=production \
+  --from-literal=LOG_LEVEL=info
 ```
 
 This method is commonly used during:
@@ -287,13 +287,12 @@ Example:
 
 ```yaml
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: app-secret
-type: Opaque
-stringData:
-  username: admin
-  password: MySecurePassword123
+  name: app-config
+data:
+  APP_ENV: production
+  LOG_LEVEL: info
 ```
 
 Apply the resource:
@@ -439,16 +438,14 @@ kubectl exec -it <pod-name> -- env | grep APP
 
 # Screenshots
 
-Store screenshots in:
+Evidence captured during this scenario:
 
-```text
-screenshots/
-├── 01-configmap-missing.png
-├── 02-describe-pod-error.png
-├── 03-configmap-created.png
-├── 04-pod-running.png
-└── 05-env-verification.png
-```
+- [createcontainerconfigerror](screenshots/01-createcontainerconfigerror.png)
+- [describe pod](screenshots/02-describe-pod.png)
+- [configmap list empty](screenshots/03-configmap-list-empty.png)
+- [configmap created](screenshots/04-configmap-created.png)
+- [pod running](screenshots/05-pod-running.png)
+- [env verification](screenshots/06-env-verification.png)
 
 ---
 

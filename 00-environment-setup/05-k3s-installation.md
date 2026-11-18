@@ -15,7 +15,7 @@ Install a single-node Kubernetes cluster on the VM, run `kubectl` as a normal us
 | Batteries included | containerd, Flannel CNI, CoreDNS, Traefik ingress, ServiceLB, local-path storage, metrics-server and a network policy controller, all installed by default |
 | Easy rebuild | One install command, one uninstall script |
 
-**Trade-off:** a single node can't show multi-node scheduling, node failure or control-plane HA. Those are covered in [module 02](../02-incident-drills/README.md) and on OpenShift in [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records).
+**Trade-off:** a single node can't show multi-node scheduling, node failure or control-plane HA. Those are the focus of [module 02](../02-incident-drills/README.md) (starting) and are practised on OpenShift in [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records).
 
 ## Install (pinned to the version this cluster runs)
 

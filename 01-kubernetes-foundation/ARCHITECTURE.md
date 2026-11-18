@@ -41,6 +41,23 @@ This document explains how Kubernetes works internally, what happens when resour
 
 ---
 
+# 🐄 How K3s differs (the cluster these labs ran on)
+
+This guide describes upstream Kubernetes. On the single-node K3s cluster used in these labs, a few things look different:
+
+| Upstream Kubernetes | K3s (single server) |
+|---|---|
+| Separate API server, scheduler and controller-manager Pods | All control-plane components run inside one `k3s` process (no static Pods) |
+| etcd stores cluster state | SQLite via kine by default; embedded etcd only with `--cluster-init` (HA) |
+| kube-proxy as a DaemonSet | kube-proxy runs inside the `k3s` process |
+| You choose a CNI | Flannel is built in |
+| NetworkPolicy needs a policy-capable CNI | Embedded kube-router network policy controller enforces it |
+| LoadBalancer Services need a cloud or MetalLB | ServiceLB (klipper-lb) publishes them on node ports |
+| Ingress controller installed separately | Traefik installed by default |
+| Storage provisioner installed separately | `local-path` provisioner is the default StorageClass |
+
+---
+
 # 🏗️ Kubernetes Cluster Architecture
 
 A Kubernetes cluster consists of two primary layers:
@@ -268,10 +285,13 @@ kubectl apply deployment.yaml
     Authorization (RBAC)
             │
             ▼
-    Admission Controllers
+   Mutating Admission
             │
             ▼
-      Manifest Validation
+    Schema Validation
+            │
+            ▼
+  Validating Admission
             │
             ▼
             etcd
@@ -1590,7 +1610,7 @@ NO → Traffic Blocked
 
 Important
 
-A NetworkPolicy requires a compatible CNI plugin (for example, Calico, Cilium, Antrea, or OVN-Kubernetes) to enforce the rules.
+A NetworkPolicy needs a policy engine to enforce it: a policy-capable CNI (for example, Calico, Cilium, Antrea, or OVN-Kubernetes) or a separate controller. Default K3s pairs Flannel (no policy support) with an embedded kube-router network policy controller, so policies **are** enforced on this cluster; see [Lab 13 scenario 08](labs/lab-13-production-troubleshooting/scenario-08-network-policy/README.md).
 
 ---
 

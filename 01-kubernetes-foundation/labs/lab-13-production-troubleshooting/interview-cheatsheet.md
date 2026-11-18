@@ -230,6 +230,7 @@ Allows slow-starting applications additional time before liveness checks begin.
 - HTTP
 - TCP
 - Exec
+- gRPC
 
 ---
 
@@ -253,6 +254,7 @@ PVC
 - Provisioner unavailable
 - No matching PV
 - Capacity mismatch
+- `WaitForFirstConsumer`: normal until a Pod uses the claim
 
 ---
 
@@ -266,9 +268,7 @@ Defines how Pods communicate with each other and external endpoints.
 
 ### Q27. Does Kubernetes enforce NetworkPolicies?
 
-No.
-
-Enforcement depends on the installed CNI plugin.
+No. The API server only stores them; a policy engine enforces them, usually the CNI plugin, or a separate controller (K3s ships one based on kube-router, so default K3s does enforce them).
 
 ---
 
@@ -303,7 +303,7 @@ A container exceeded its memory limit and was terminated by the Linux OOM Killer
 
 ### Q31. Exit Code 137?
 
-Typically indicates the process was killed because it exceeded the memory limit.
+128 + 9 = SIGKILL. Often the OOM killer, but confirm with the `OOMKilled` reason; other SIGKILLs give 137 too.
 
 ---
 

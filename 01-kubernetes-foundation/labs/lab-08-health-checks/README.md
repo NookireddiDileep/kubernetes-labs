@@ -128,7 +128,7 @@ Observation:
 | --------- | ------------------------------------- | --------------------------------------------- |
 | Liveness  | Verify application is alive           | Restart container                             |
 | Readiness | Verify application can serve traffic  | Remove Pod from Service endpoints             |
-| Startup   | Allow slow applications to initialize | Delay liveness checks until startup completes |
+| Startup   | Allow slow applications to initialize | Restart container after `failureThreshold` failures; until it succeeds, liveness and readiness checks don't run |
 
 ---
 

@@ -38,7 +38,7 @@ Verified:
 
 * Traefik Pod was in the **Running** state.
 * Default IngressClass was **traefik**.
-* Traefik Service was exposed through a LoadBalancer.
+* Traefik Service was of type LoadBalancer; on K3s, the built-in ServiceLB (klipper-lb) gives it the node IP as its external address.
 
 Conclusion
 
@@ -145,7 +145,7 @@ The configured rule routed requests from the root path (`/`) to the `nginx-servi
 
 ---
 
-# Step 6 – External Connectivity
+# Step 6 – Connectivity Through the Ingress
 
 Test Command
 
@@ -161,9 +161,9 @@ Welcome to nginx!
 
 Observation
 
-The successful response confirmed that external HTTP traffic passed through:
+The successful response confirmed that HTTP traffic sent to the node IP (from the VM itself, not from the internet) passed through:
 
-* Traefik LoadBalancer
+* Traefik LoadBalancer Service (implemented by K3s ServiceLB, which listens on the node's ports 80/443)
 * Traefik Ingress Controller
 * Ingress Resource
 * ClusterIP Service

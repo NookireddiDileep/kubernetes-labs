@@ -198,7 +198,9 @@ These Kubernetes features are widely used in enterprise environments to:
 | Pod rejected due to quota     | Namespace quota exceeded       | Increase quota or free resources        |
 | Pod missing resource requests | No LimitRange configured       | Create a LimitRange                     |
 | Namespace not found           | Namespace not created          | Create or specify the correct namespace |
-| Deployment remains Pending    | Insufficient cluster resources | Check node capacity and quotas          |
+| Pod stays Pending             | Insufficient node capacity     | `kubectl describe pod`, check node allocatable |
+| Deployment shows 0 Ready, no Pods at all | Quota would be exceeded, so the ReplicaSet can't create Pods | `kubectl describe rs` → `FailedCreate ... exceeded quota` |
+| Pod rejected: `must specify limits.cpu` | Quota covers CPU/memory but the Pod sets no requests/limits and there is no LimitRange | Add resources to the Pod or a LimitRange with defaults |
 
 ---
 
