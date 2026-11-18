@@ -1,0 +1,121 @@
+nookireddi_dileep_career@platform-engineer-lab:~/platform-lab/platform-engineer-lab2026/01-kubernetes-foundation/labs/lab-08-health-checks$ kubectl describe pod -l app=nginx-liveness
+Name:             nginx-liveness-76bc76cc9d-pfkln
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             platform-engineer-lab/10.160.0.2
+Start Time:       Wed, 22 Jul 2026 13:23:38 +0000
+Labels:           app=nginx-liveness
+                  pod-template-hash=76bc76cc9d
+Annotations:      <none>
+Status:           Running
+IP:               10.42.0.89
+IPs:
+  IP:           10.42.0.89
+Controlled By:  ReplicaSet/nginx-liveness-76bc76cc9d
+Containers:
+  nginx:
+    Container ID:   containerd://1b59b2f3c387fc73ef86aaf366b33228abf8a70375f1b0461b1e2d0cc8b01923
+    Image:          nginx:latest
+    Image ID:       docker.io/library/nginx@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 22 Jul 2026 13:23:40 +0000
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:80/ delay=10s timeout=2s period=5s #success=1 #failure=3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jhddm (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-jhddm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  29s   default-scheduler  Successfully assigned default/nginx-liveness-76bc76cc9d-pfkln to platform-engineer-lab
+  Normal  Pulling    29s   kubelet            spec.containers{nginx}: Pulling image "nginx:latest"
+  Normal  Pulled     28s   kubelet            spec.containers{nginx}: Successfully pulled image "nginx:latest" in 1.372s (1.372s including waiting). Image size: 63132183 bytes.
+  Normal  Created    28s   kubelet            spec.containers{nginx}: Container created
+  Normal  Started    28s   kubelet            spec.containers{nginx}: Container started
+nookireddi_dileep_career@platform-engineer-lab:~/platform-lab/platform-engineer-lab2026/01-kubernetes-foundation/labs/lab-08-health-checks$ kubectl get pods -w
+NAME                                    READY   STATUS    RESTARTS      AGE
+nginx-dynamic-demo-85785c957-zwpfb      1/1     Running   1 (19h ago)   20h
+nginx-liveness-76bc76cc9d-pfkln         1/1     Running   0             38s
+nginx-no-resources-7f98dc64-n6krq       1/1     Running   0             104m
+nginx-pv-demo-5b89f8f68b-z6s9g          1/1     Running   1 (19h ago)   21h
+nginx-stateful-0                        1/1     Running   0             144m
+nginx-stateful-1                        1/1     Running   0             158m
+nginx-with-resources-7dbfc9fcc7-bfhcw   1/1     Running   0             89m
+^Cnookireddi_dileep_career@platform-engineer-lab:~/platform-lab/platform-engineer-lab2026/01-kubernetes-foundation/labs/lab-08-health-checks$ kubectl describe pod -l app=nginx-liveness
+Name:             nginx-liveness-76bc76cc9d-pfkln
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             platform-engineer-lab/10.160.0.2
+Start Time:       Wed, 22 Jul 2026 13:23:38 +0000
+Labels:           app=nginx-liveness
+                  pod-template-hash=76bc76cc9d
+Annotations:      <none>
+Status:           Running
+IP:               10.42.0.89
+IPs:
+  IP:           10.42.0.89
+Controlled By:  ReplicaSet/nginx-liveness-76bc76cc9d
+Containers:
+  nginx:
+    Container ID:   containerd://1b59b2f3c387fc73ef86aaf366b33228abf8a70375f1b0461b1e2d0cc8b01923
+    Image:          nginx:latest
+    Image ID:       docker.io/library/nginx@sha256:5a88c9c45479443d7be2eadc894b4ed0a9801bae03d97a5760ae13b5c2005942
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 22 Jul 2026 13:23:40 +0000
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:80/ delay=10s timeout=2s period=5s #success=1 #failure=3
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-jhddm (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-jhddm:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  61s   default-scheduler  Successfully assigned default/nginx-liveness-76bc76cc9d-pfkln to platform-engineer-lab
+  Normal  Pulling    61s   kubelet            spec.containers{nginx}: Pulling image "nginx:latest"
+  Normal  Pulled     60s   kubelet            spec.containers{nginx}: Successfully pulled image "nginx:latest" in 1.372s (1.372s including waiting). Image size: 63132183 bytes.
+  Normal  Created    60s   kubelet            spec.containers{nginx}: Container created
+  Normal  Started    60s   kubelet            spec.containers{nginx}: Container started

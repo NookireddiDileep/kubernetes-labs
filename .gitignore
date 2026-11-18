@@ -1,0 +1,9 @@
+# OS / editor
+.DS_Store
+*.swp
+# never commit credentials
+kubeconfig*
+*.kubeconfig
+*.pem
+*.key
+.env

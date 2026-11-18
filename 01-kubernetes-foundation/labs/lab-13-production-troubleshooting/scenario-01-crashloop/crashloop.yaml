@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crash-demo
+spec:
+  containers:
+    - name: crash-container
+      image: busybox
+      command:
+        - /bin/sh
+        - -c
+        - "echo Application running && sleep 3600"

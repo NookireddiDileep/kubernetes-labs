@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dynamic-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-dynamic-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-dynamic-demo
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: dynamic-storage
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: dynamic-storage
+        persistentVolumeClaim:
+          claimName: nginx-dynamic-pvc
