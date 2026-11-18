@@ -259,13 +259,33 @@ NGINX Pods
 
 # Interview Questions
 
-1. What is a Kubernetes Ingress?
-2. What is an Ingress Controller?
-3. How does Ingress differ from a LoadBalancer Service?
-4. What is path-based routing?
-5. What is host-based routing?
-6. What is TLS termination?
-7. Why are ClusterIP Services commonly used behind an Ingress?
+**1. What is a Kubernetes Ingress?**
+
+An API object with HTTP(S) routing rules (hosts, paths, TLS) that send traffic to Services.
+
+**2. What is an Ingress Controller?**
+
+The software that reads Ingress objects and actually routes traffic, such as Traefik (built into K3s), NGINX or HAProxy. Without a controller, an Ingress does nothing.
+
+**3. How does Ingress differ from a LoadBalancer Service?**
+
+A LoadBalancer Service exposes one Service at layer 4 with its own external IP. An Ingress is layer 7 and lets many Services share one entry point using host and path rules and TLS.
+
+**4. What is path-based routing?**
+
+Sending requests to different Services based on the URL path, such as `/api` to one Service and `/` to another.
+
+**5. What is host-based routing?**
+
+Sending requests to different Services based on the HTTP `Host` header, such as `app.example.com` and `api.example.com` on the same IP.
+
+**6. What is TLS termination?**
+
+Decrypting HTTPS at the Ingress controller using a certificate stored in a Secret, then forwarding plain HTTP (or re-encrypted HTTPS) to the backends.
+
+**7. Why are ClusterIP Services commonly used behind an Ingress?**
+
+The controller already handles external exposure, so backends only need an internal, stable address. ClusterIP keeps them off node ports and out of direct reach.
 
 ---
 

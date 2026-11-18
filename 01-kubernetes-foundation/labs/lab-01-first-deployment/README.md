@@ -189,13 +189,33 @@ kubectl logs <pod-name> -n demo
 
 ## Interview Questions
 
-1. Why use a Deployment instead of creating Pods directly?
-2. What is the responsibility of a ReplicaSet?
-3. What is the reconciliation loop?
-4. Why did the Pod name change after deletion?
-5. How does Kubernetes perform self-healing?
-6. What is the difference between desired state and actual state?
-7. What is the default Deployment strategy?
+**1. Why use a Deployment instead of creating Pods directly?**
+
+So the workload heals and scales itself. A bare Pod that dies or whose node fails is gone; a Deployment keeps the desired replica count through a ReplicaSet and adds rolling updates and rollbacks.
+
+**2. What is the responsibility of a ReplicaSet?**
+
+To keep the specified number of Pods matching its selector running at all times: it creates Pods when there are too few and deletes them when there are too many.
+
+**3. What is the reconciliation loop?**
+
+Controllers continuously watch the desired state (spec) in the API server, compare it with the actual state, and act to close the gap. In this lab the ReplicaSet controller saw 0 of 1 Pods after the delete and created a new one.
+
+**4. Why did the Pod name change after deletion?**
+
+The replacement is a brand-new Pod, not a restart. ReplicaSet Pods are named `<replicaset-name>-<random-suffix>`, so a new suffix is generated; the ReplicaSet name stays the same because the Pod template didn't change.
+
+**5. How does Kubernetes perform self-healing?**
+
+Through controllers: if a Pod or its node disappears, the ReplicaSet creates a new Pod, and the scheduler places it. Inside a Pod, the kubelet restarts failed containers according to `restartPolicy` and liveness probes.
+
+**6. What is the difference between desired state and actual state?**
+
+Desired state is what you declared in the spec (for example, 1 replica of nginx). Actual state is what is running now, reported in `status`. Kubernetes' job is to make actual match desired.
+
+**7. What is the default Deployment strategy?**
+
+`RollingUpdate`, with `maxSurge: 25%` and `maxUnavailable: 25%`. The alternative is `Recreate`, which stops all old Pods before starting new ones.
 
 ---
 

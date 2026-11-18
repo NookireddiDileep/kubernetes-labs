@@ -176,14 +176,20 @@ After completing this lab, you should observe:
 ## Screenshots
 
 ```text
-screenshots/
-├── 01-configmap-created.png
-├── 02-configmap-list.png
-├── 03-configmap-describe.png
-├── 04-deployment-created.png
-├── 05-pods-running.png
-├── 06-configmap-yaml.png
-├── 07-configmap-env-inside-pod.png
+lab-03-configmaps/
+├── configmap.yaml
+├── deployment.yaml
+├── observations.md
+├── README.md
+└── screenshots/
+    ├── 01-configmap-created-configured.png
+    ├── 02-configmap-list.png
+    ├── 03-configmap-describe.png
+    ├── 04-deployment-created-unchanged.png
+    ├── 05-pod-running.png
+    ├── 06-env-variables.png
+    ├── README.md
+    └── resource-overview.png
 ```
 
 ---
@@ -214,16 +220,45 @@ screenshots/
 
 ## Interview Questions
 
-1. What is a Kubernetes ConfigMap?
-2. How is a ConfigMap different from a Secret?
-3. What types of data can be stored in a ConfigMap?
-4. How can a Pod consume a ConfigMap?
-5. Can a ConfigMap be mounted as a volume?
-6. How do ConfigMap updates affect running Pods?
-7. What are common production use cases for ConfigMaps?
-8. When should you use ConfigMaps instead of Secrets?
-9. How do you inspect a ConfigMap?
-10. What are the best practices for managing application configuration?
+**1. What is a Kubernetes ConfigMap?**
+
+An API object that holds non-confidential configuration as key-value pairs or files, so it can be changed without rebuilding the image.
+
+**2. How is a ConfigMap different from a Secret?**
+
+Both hold configuration, but Secrets are meant for sensitive data: they are base64-encoded, can be encrypted at rest, are treated separately by RBAC and are kept in memory (tmpfs) when mounted. A ConfigMap is plain text.
+
+**3. What types of data can be stored in a ConfigMap?**
+
+Strings in `data` (single values or whole files such as `nginx.conf`) and binary content in `binaryData`. The total size is limited to 1 MiB.
+
+**4. How can a Pod consume a ConfigMap?**
+
+As environment variables (`valueFrom.configMapKeyRef` or `envFrom`), as files through a volume, or as command-line arguments built from those environment variables.
+
+**5. Can a ConfigMap be mounted as a volume?**
+
+Yes. Each key becomes a file in the mounted directory, or you can pick specific keys with `items`.
+
+**6. How do ConfigMap updates affect running Pods?**
+
+Environment variables are read only at container start, so Pods must be restarted (for example `kubectl rollout restart`). Mounted volumes are updated by the kubelet after a short delay, except for `subPath` mounts, which never update. Immutable ConfigMaps never change.
+
+**7. What are common production use cases for ConfigMaps?**
+
+Application settings per environment, feature flags, config files for NGINX or Prometheus, and connection endpoints that aren't secret.
+
+**8. When should you use ConfigMaps instead of Secrets?**
+
+Whenever the value is not sensitive. Anything that grants access (passwords, tokens, keys, certificates) belongs in a Secret or an external secret manager.
+
+**9. How do you inspect a ConfigMap?**
+
+`kubectl get configmap <name> -o yaml` or `kubectl describe configmap <name>`, and inside the Pod with `env` or by reading the mounted files.
+
+**10. What are the best practices for managing application configuration?**
+
+Keep it in Git and apply it declaratively, separate config from images, keep secrets out of ConfigMaps, version or mark ConfigMaps immutable for safe rollouts, and roll Pods when config changes.
 
 ---
 

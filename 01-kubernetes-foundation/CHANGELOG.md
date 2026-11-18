@@ -6,6 +6,17 @@ This changelog follows the principles of semantic versioning and documents major
 
 ---
 
+## [v1.0.3] - 2026-11-18
+
+### 🎤 Interview answers and file listings
+
+- Every interview question in labs 01–12 and Lab 13 scenarios 01–02 now has a short answer (139 answers), tied to what the lab showed where possible.
+- Folder diagrams in labs 02, 03, 05 and scenarios 01–03 regenerated from the real files.
+- Lab 02 now reuses Lab 01's `nginx.yaml` (the Deployment its Service selects) instead of a `deployment.yaml` that was never in the repo.
+- Screenshot index pages in labs 03 and 05–11 were planning templates naming files that don't exist; they now link the actual screenshots.
+
+---
+
 ## [v1.0.2] - 2026-11-18
 
 ### 🔍 End-to-end technical review

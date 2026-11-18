@@ -255,13 +255,33 @@ Observed resource usage:
 
 # Interview Questions
 
-1. What is the purpose of a Kubernetes Namespace?
-2. How does ResourceQuota differ from LimitRange?
-3. What happens when a Pod does not specify resource requests or limits?
-4. What are the Kubernetes QoS classes?
-5. Why are ResourceQuotas important in enterprise clusters?
-6. How do Namespaces support multi-tenancy?
-7. How does the LimitRanger admission controller work?
+**1. What is the purpose of a Kubernetes Namespace?**
+
+To divide one cluster into separate scopes for names, access control, quotas and policies, for example per team or environment.
+
+**2. How does ResourceQuota differ from LimitRange?**
+
+A ResourceQuota caps the total a namespace can use (Pods, CPU, memory, objects). A LimitRange sets defaults and per-container minimums and maximums. In this lab the LimitRange gave defaults of 250m/256Mi requests and 500m/512Mi limits.
+
+**3. What happens when a Pod does not specify resource requests or limits?**
+
+Without a LimitRange it gets no requests (BestEffort QoS); if the namespace has a CPU/memory quota, the Pod is rejected. With a LimitRange, defaults are injected at admission, as this lab showed.
+
+**4. What are the Kubernetes QoS classes?**
+
+BestEffort, Burstable and Guaranteed, decided by the requests and limits; see Lab 07.
+
+**5. Why are ResourceQuotas important in enterprise clusters?**
+
+They stop one team or runaway workload from using the whole cluster, make capacity planning and chargeback possible, and force workloads to declare resources.
+
+**6. How do Namespaces support multi-tenancy?**
+
+Namespaces are the boundary for RBAC, quotas, LimitRanges and NetworkPolicies. They give soft multi-tenancy; strong isolation needs more (policies, separate nodes or clusters).
+
+**7. How does the LimitRanger admission controller work?**
+
+An admission controller that, at creation time, fills in default requests and limits from the namespace's LimitRange and rejects Pods outside its min/max. It added the defaults in this lab.
 
 ---
 

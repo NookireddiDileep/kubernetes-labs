@@ -43,12 +43,21 @@ By completing this lab, you will learn how to:
 
 ```text
 lab-02-services/
-├── README.md
-├── deployment.yaml
-├── service.yaml
 ├── observations.md
+├── README.md
+├── service.yaml
 └── screenshots/
-    └── README.md
+    ├── 01-deployment-status.png
+    ├── 02-service-created.png
+    ├── 03-describe-service.png
+    ├── 04-endpoints.png
+    ├── 05-endpointslice.png
+    ├── 06-pod-details.png
+    ├── 07-scale-to-four-replicas.png
+    ├── 08-endpointslice-after-scaling.png
+    ├── 09-service-verification.png
+    ├── 10-curl-Thank you for using nginx.PNG
+    └── 10.1.nginx-service.PNG
 ```
 
 ---
@@ -65,10 +74,10 @@ lab-02-services/
 
 ### Step 1 – Deploy the Application
 
-Create the Deployment.
+Create the Deployment. This lab reuses the NGINX Deployment from Lab 01 (`app: nginx` in namespace `demo`), which is what `service.yaml` selects.
 
 ```bash
-kubectl apply -f deployment.yaml
+kubectl apply -f ../lab-01-first-deployment/nginx.yaml
 ```
 
 Verify the Deployment.
@@ -152,7 +161,7 @@ Delete the resources.
 ```bash
 kubectl delete -f service.yaml
 
-kubectl delete -f deployment.yaml
+kubectl delete -f ../lab-01-first-deployment/nginx.yaml
 ```
 
 ---
@@ -173,14 +182,22 @@ After completing this lab, you should observe:
 ## Screenshots
 
 ```text
-screenshots/
-├── 01-deployment-created.png
-├── 02-pods-running.png
-├── 03-service-created.png
-├── 04-service-describe.png
-├── 05-endpoints.png
-├── 06-endpointslices.png
-├── 07-service-connectivity-test.png
+lab-02-services/
+├── observations.md
+├── README.md
+├── service.yaml
+└── screenshots/
+    ├── 01-deployment-status.png
+    ├── 02-service-created.png
+    ├── 03-describe-service.png
+    ├── 04-endpoints.png
+    ├── 05-endpointslice.png
+    ├── 06-pod-details.png
+    ├── 07-scale-to-four-replicas.png
+    ├── 08-endpointslice-after-scaling.png
+    ├── 09-service-verification.png
+    ├── 10-curl-Thank you for using nginx.PNG
+    └── 10.1.nginx-service.PNG
 ```
 
 ---
@@ -212,16 +229,45 @@ screenshots/
 
 ## Interview Questions
 
-1. What is a Kubernetes Service?
-2. Why do Pods require a Service?
-3. What are the different Service types in Kubernetes?
-4. What is the default Service type?
-5. How do Labels and Selectors work with Services?
-6. What are Endpoints?
-7. What are EndpointSlices?
-8. How does Kubernetes perform Service discovery?
-9. What happens if a Pod is recreated?
-10. When would you use ClusterIP, NodePort, or LoadBalancer?
+**1. What is a Kubernetes Service?**
+
+A stable virtual IP and DNS name in front of a changing set of Pods selected by labels, with load balancing across them.
+
+**2. Why do Pods require a Service?**
+
+Pod IPs change whenever Pods are recreated, rescheduled or scaled. A Service gives clients one address that doesn't change and only sends traffic to ready Pods.
+
+**3. What are the different Service types in Kubernetes?**
+
+`ClusterIP` (internal only), `NodePort` (a port on every node), `LoadBalancer` (an external load balancer from the cloud or, on K3s, ServiceLB) and `ExternalName` (a DNS alias). A headless Service (`clusterIP: None`) returns Pod IPs directly.
+
+**4. What is the default Service type?**
+
+`ClusterIP`.
+
+**5. How do Labels and Selectors work with Services?**
+
+The Service's `selector` lists labels; every Pod whose labels match (and that is ready) becomes a backend. A typo in either the selector or the Pod labels leaves the Service with no endpoints.
+
+**6. What are Endpoints?**
+
+The list of IP:port pairs of the Pods currently backing a Service. kube-proxy programs its rules from them.
+
+**7. What are EndpointSlices?**
+
+The scalable replacement for Endpoints: the backend list is split into slices of up to 100 entries, so large Services don't rewrite one huge object on every change. kube-proxy reads EndpointSlices.
+
+**8. How does Kubernetes perform Service discovery?**
+
+Through cluster DNS (CoreDNS): `<service>.<namespace>.svc.cluster.local` resolves to the ClusterIP. Pods also get legacy environment variables for Services that existed when they started.
+
+**9. What happens if a Pod is recreated?**
+
+It gets a new IP, but the Service selector still matches it, so the EndpointSlice is updated automatically and clients using the Service name are unaffected.
+
+**10. When would you use ClusterIP, NodePort, or LoadBalancer?**
+
+ClusterIP for internal traffic between services; NodePort for quick tests or when an external load balancer targets node ports; LoadBalancer to expose one service directly in a cloud. For many HTTP apps, use one Ingress or Gateway in front of ClusterIP Services instead.
 
 ---
 

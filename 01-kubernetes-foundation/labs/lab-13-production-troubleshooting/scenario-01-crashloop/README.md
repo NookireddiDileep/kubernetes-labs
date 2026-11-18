@@ -38,15 +38,14 @@ After completing this lab, you will be able to:
 
 ```text
 scenario-01-crashloop/
-├── README.md
 ├── crashloop.yaml
+├── README.md
 └── screenshots/
-    ├── 01-pod-created.png
-    ├── 02-crashloopbackoff.png
+    ├── 01 02-pod-created and crashloop status.png
     ├── 03-describe-pod.png
-    ├── 04-pod-logs.png
+    ├── 04-events.png
     ├── 05-pod-update-error.png
-    └── 06-pod-running.png
+    └── 06-pod-running-after-error-fix.png
 ```
 
 ---
@@ -327,27 +326,69 @@ CrashLoopBackOff
 
 ### Basic
 
-1. What is CrashLoopBackOff?
-2. What causes CrashLoopBackOff?
-3. Which command do you execute first?
-4. How do you retrieve container logs?
-5. What does Exit Code 1 indicate?
+**1. What is CrashLoopBackOff?**
+
+A Pod status meaning a container keeps exiting after it starts, so the kubelet keeps restarting it with a growing delay between attempts.
+
+**2. What causes CrashLoopBackOff?**
+
+Anything that makes the main process exit: a bad command or entrypoint, an app crash, missing config or dependencies, failing liveness probes, or OOMKills.
+
+**3. Which command do you execute first?**
+
+`kubectl describe pod <pod>`: it shows the last state, exit code, reason and the events. Then `kubectl logs <pod> --previous`.
+
+**4. How do you retrieve container logs?**
+
+`kubectl logs <pod>` for the current container, `-c <container>` for multi-container Pods, `--previous` for the instance that crashed.
+
+**5. What does Exit Code 1 indicate?**
+
+The process exited with a general error. The cause is in the application or its command; in this scenario the command was literally `exit 1`.
 
 ### Intermediate
 
-6. Why does Kubernetes wait before restarting the container?
-7. What is exponential back-off?
-8. How do you inspect previous container logs?
-9. How would you troubleshoot if the application exits before logs are generated?
-10. What information is available in `kubectl describe`?
+**6. Why does Kubernetes wait before restarting the container?**
+
+To avoid hammering the node and dependencies with a container that fails instantly, and to give transient problems time to clear.
+
+**7. What is exponential back-off?**
+
+The delay doubles after each failure: 10 s, 20 s, 40 s and so on, capped at 5 minutes, and resets after the container has run cleanly for 10 minutes.
+
+**8. How do you inspect previous container logs?**
+
+`kubectl logs <pod> --previous`.
+
+**9. How would you troubleshoot if the application exits before logs are generated?**
+
+Use `kubectl describe` for the exit code, reason and events; override the command to keep it alive (`sleep infinity`) and exec in; use `kubectl debug` with an ephemeral container or a copy of the Pod; check config and mounts.
+
+**10. What information is available in `kubectl describe`?**
+
+Container state, last state, exit code and reason, restart count, image, command, probes, mounts, resources, node, QoS class and the recent events.
 
 ### Advanced
 
-11. Why are Pods immutable?
-12. Which Pod fields can be updated?
-13. How would you recover a Deployment experiencing CrashLoopBackOff?
-14. How do liveness and startup probes influence restart behavior?
-15. Describe a real production incident involving CrashLoopBackOff and your troubleshooting approach.
+**11. Why are Pods immutable?**
+
+So that what's running always matches what was scheduled and admitted; changes go through a new Pod, which keeps scheduling, security checks and rollouts consistent.
+
+**12. Which Pod fields can be updated?**
+
+Only a few, such as container `image`, `activeDeadlineSeconds` and added tolerations, plus resources through the resize subresource. The command, env vars and volumes need a new Pod.
+
+**13. How would you recover a Deployment experiencing CrashLoopBackOff?**
+
+Find the cause from events and previous logs, then `kubectl rollout undo` to the last good revision, or fix the manifest and apply it so the Deployment rolls out new Pods.
+
+**14. How do liveness and startup probes influence restart behavior?**
+
+A failing liveness probe kills and restarts a container, so a probe that's too strict can itself cause CrashLoopBackOff. A startup probe protects slow starts by holding liveness checks until the app is up.
+
+**15. Describe a real production incident involving CrashLoopBackOff and your troubleshooting approach.**
+
+Use the format symptom → evidence (`describe`, `logs --previous`, events) → root cause → fix → prevention. Example: a release changed an environment variable name, the app exited 1 on start; rolled back, fixed the config, added a pre-deploy config check.
 
 ---
 

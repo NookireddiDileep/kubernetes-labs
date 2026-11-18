@@ -261,14 +261,37 @@ RBAC is commonly used to:
 
 # Interview Questions
 
-1. What is RBAC?
-2. What is a ServiceAccount?
-3. What is the difference between Role and ClusterRole?
-4. What is the difference between RoleBinding and ClusterRoleBinding?
-5. What does `kubectl auth can-i` do?
-6. What is the Principle of Least Privilege?
-7. Why are ServiceAccounts preferred for workloads?
-8. How do you troubleshoot an RBAC "Forbidden" error?
+**1. What is RBAC?**
+
+Role-Based Access Control: the authorizer that decides what an authenticated user or ServiceAccount may do, using Roles (permissions) and bindings (who gets them).
+
+**2. What is a ServiceAccount?**
+
+An identity for processes running in Pods. Pods use it to authenticate to the API server with a short-lived token injected by the kubelet.
+
+**3. What is the difference between Role and ClusterRole?**
+
+A Role grants permissions inside one namespace. A ClusterRole is cluster-wide: it can cover cluster-scoped resources (nodes, PVs) or be reused across namespaces.
+
+**4. What is the difference between RoleBinding and ClusterRoleBinding?**
+
+A RoleBinding grants a Role or ClusterRole within one namespace. A ClusterRoleBinding grants a ClusterRole across the whole cluster.
+
+**5. What does `kubectl auth can-i` do?**
+
+Asks the API server whether an identity is allowed to do an action, for example `kubectl auth can-i delete pods --as=system:serviceaccount:default:pod-reader`, which answered `no` in this lab.
+
+**6. What is the Principle of Least Privilege?**
+
+Give each identity only the permissions it needs, nothing more. Here, the `pod-reader` ServiceAccount got only `get`, `list` and `watch` on Pods.
+
+**7. Why are ServiceAccounts preferred for workloads?**
+
+They are namespaced, managed through the API and get short-lived tokens, so each workload can have its own tightly scoped permissions instead of sharing a powerful human credential.
+
+**8. How do you troubleshoot an RBAC "Forbidden" error?**
+
+Read the message (it names the user, verb, resource and namespace), confirm with `kubectl auth can-i ... --as`, find the bindings for that identity with `kubectl get rolebindings,clusterrolebindings -A -o wide`, then add the missing rule to a Role and bind it.
 
 ---
 
