@@ -1734,9 +1734,7 @@ kubectl get pv
 
 ✔ CronJobs
 
-✔ Init Containers
-
-✔ Multi-Container Pods
+✔ Health Probes
 
 ---
 
@@ -1745,6 +1743,8 @@ kubectl get pv
 ✔ Services
 
 ✔ DNS
+
+✔ Ingress
 
 ✔ NetworkPolicies
 

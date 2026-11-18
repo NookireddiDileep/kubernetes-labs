@@ -31,7 +31,8 @@ After completing this lab, you will be able to:
 | Operating System | Ubuntu 24.04 LTS |
 | Container Runtime | containerd |
 | Cloud Platform | Google Cloud Platform (GCP) |
-| CNI | Flannel (Default K3s) |
+| CNI | Flannel (default K3s) |
+| NetworkPolicy enforcement | K3s embedded network policy controller (kube-router netpol), on by default |
 
 ---
 
@@ -166,9 +167,9 @@ kubectl exec busybox -- wget -qO- --timeout=5 http://nginx
 
 ## Expected Behavior
 
-If the cluster uses a NetworkPolicy-capable CNI (such as Calico, Cilium, or Antrea), the connection should be blocked.
+The connection is **blocked**. In this lab `wget` failed straight away with `Connection refused` (exit code 1) instead of returning the NGINX page; see `screenshots/03-connectivity-test.png`.
 
-If using the default **K3s Flannel CNI**, the connection may still succeed because Flannel does **not** enforce NetworkPolicies by default.
+Flannel itself does not enforce NetworkPolicies, but default K3s ships an **embedded network policy controller** (kube-router's netpol library) that turns NetworkPolicy objects into iptables/ipset rules on each node. It is on unless K3s is started with `--disable-network-policy`.
 
 ---
 
@@ -176,9 +177,9 @@ If using the default **K3s Flannel CNI**, the connection may still succeed becau
 
 A Kubernetes NetworkPolicy defines traffic rules but **does not enforce them by itself**.
 
-Enforcement is performed by the cluster's CNI plugin.
+Enforcement is done by a policy engine: either the CNI plugin itself (Calico, Cilium, Antrea, OVN-Kubernetes) or a separate controller next to a CNI that has none.
 
-Since this lab uses the default K3s installation with Flannel, NetworkPolicies are created successfully but are not enforced unless a compatible policy engine is installed.
+This lab uses default K3s: Flannel for pod networking plus the embedded kube-router network policy controller for enforcement. The `deny-all-ingress` policy selects `app: nginx` and allows no ingress, so traffic from BusyBox to NGINX is rejected. On a cluster with plain Flannel and no policy controller, the same policy would be accepted by the API server but silently ignored.
 
 ---
 
@@ -194,17 +195,18 @@ NGINX Service
 NetworkPolicy Evaluated
       │
       ▼
-CNI Plugin
+Policy engine (CNI or separate controller,
+on K3s: embedded kube-router netpol)
       │
-      ├────────► Policy Supported
+      ├────────► Engine present
       │               │
       │               ▼
       │         Traffic Allowed / Denied
       │
-      └────────► Policy Not Supported
+      └────────► No engine (e.g. plain Flannel)
                       │
                       ▼
-               Traffic Continues Normally
+               Policy ignored, traffic continues
 ```
 
 ---
@@ -300,7 +302,7 @@ Identify Root Cause
 - NetworkPolicy enforcement depends on the installed CNI plugin.
 - Pod labels determine which workloads are affected.
 - Traffic should always be verified before and after policy changes.
-- Default K3s with Flannel does not enforce NetworkPolicies.
+- Default K3s **does** enforce NetworkPolicies: Flannel carries the traffic and the embedded kube-router controller enforces the rules. Plain Flannel on its own would not.
 
 ---
 
@@ -325,7 +327,7 @@ A NetworkPolicy defines how Pods are allowed to communicate with other Pods and 
 
 ### Q2. Which Kubernetes component enforces a NetworkPolicy?
 
-The **Container Network Interface (CNI) plugin** enforces NetworkPolicies.
+A **policy engine** on each node: usually the CNI plugin (Calico, Cilium, Antrea, OVN-Kubernetes), or a separate controller when the CNI has none. On K3s that is the embedded kube-router network policy controller.
 
 ---
 
@@ -335,9 +337,9 @@ No. Kubernetes provides the NetworkPolicy API, but enforcement depends on a comp
 
 ---
 
-### Q4. Does the default K3s Flannel CNI support NetworkPolicy enforcement?
+### Q4. Does default K3s (with Flannel) enforce NetworkPolicies?
 
-No. Flannel provides networking but does not enforce NetworkPolicies without additional components.
+Yes. Flannel alone does not, but K3s adds an embedded network policy controller based on kube-router, enabled by default (`--disable-network-policy` turns it off, for example when installing Calico or Cilium). This lab proved it: after the policy was applied, `wget` from BusyBox to NGINX was refused.
 
 ---
 
