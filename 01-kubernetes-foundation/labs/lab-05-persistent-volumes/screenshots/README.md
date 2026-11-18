@@ -1,21 +1,21 @@
 # Lab 05 – Screenshots
 
-Capture the following screenshots while performing the lab.
+Evidence captured during the lab. See the lab's [README](../README.md) and [observations](../observations.md) for what each step shows.
 
-| Screenshot                                 | Description                                                              |
-| ------------------------------------------ | ------------------------------------------------------------------------ |
-| 01-pv-created.png                          | PersistentVolume successfully created                                    |
-| 02-pvc-pending-storageclass-mismatch.png   | PVC in Pending state before StorageClass fix                             |
-| 03-pvc-bound.png                           | PVC successfully bound to the static PV                                  |
-| 04-static-deployment-created.png           | NGINX Deployment using the static PVC                                    |
-| 05-volume-mounted.png                      | Volume mounted inside the running container                              |
-| 06-data-written.png                        | HTML file created within the mounted volume                              |
-| 07-data-persisted-after-pod-recreation.png | File still available after Pod recreation                                |
-| 08-dynamic-pvc-created.png                 | Dynamic PVC created using the `local-path` StorageClass                  |
-| 09-dynamic-pv-auto-created.png             | Automatically provisioned PersistentVolume visible with `kubectl get pv` |
-| 10-storageclass-details.png                | Output of `kubectl describe storageclass local-path`                     |
-| 11-dynamic-pod-running.png                 | Dynamic provisioning Pod in the Running state                            |
-| 12-pvc-events.png                          | PVC events showing `WaitForFirstConsumer` and `ProvisioningSucceeded`    |
+- [01-pv-created](01-pv-created.png)
+- [02-pvc-pending-storageclass-mismatch](02-pvc-pending-storageclass-mismatch.png)
+- [03-pvc-bound](03-pvc-bound.png)
+- [04-deployment-created](04-deployment-created.png)
+- [05-volume-mounted](05-volume-mounted.png)
+- [06-index-html-created](06-index-html-created.png)
+- [07-pod-deleted](07-pod-deleted.png)
+- [08-data-persisted-after-pod-recreation](08-data-persisted-after-pod-recreation.png)
+- [09-dynamic-pvc-created](09-dynamic-pvc-created.png)
+- [10-dynamic-pv-auto-created](10-dynamic-pv-auto-created.png)
+- [11-dynamic-pod-running -part1](11-dynamic-pod-running%20-part1.png)
+- [11-dynamic-pod-running-part2](11-dynamic-pod-running-part2.png)
+- [11-storageclass-details](11-storageclass-details.png)
+- [12-pvc-events](12-pvc-events.png)
 
 ## Recommended Commands
 
@@ -26,11 +26,3 @@ kubectl get pods
 kubectl describe pvc nginx-dynamic-pvc
 kubectl describe storageclass local-path
 ```
-
-## Tips
-
-* Use a consistent terminal width for all screenshots.
-* Ensure command output is fully visible.
-* Capture the command along with its output for clarity.
-* Organize screenshots in chronological order using the filenames above.
-

@@ -254,16 +254,45 @@ CronJobs
 
 # Interview Questions
 
-1. What is a Kubernetes Job?
-2. What is a Kubernetes CronJob?
-3. Difference between Job and Deployment?
-4. Difference between Job and CronJob?
-5. What is `backoffLimit`?
-6. What is `restartPolicy`?
-7. What is `concurrencyPolicy`?
-8. What cron expression runs every two minutes?
-9. How do you check Job logs?
-10. What are common production use cases for CronJobs?
+**1. What is a Kubernetes Job?**
+
+A controller that runs Pods until a set number of them complete successfully, for one-off batch work. This lab's Job finished `1/1` with exit code 0.
+
+**2. What is a Kubernetes CronJob?**
+
+A controller that creates Jobs on a cron schedule, like `*/2 * * * *` (every two minutes) in this lab.
+
+**3. Difference between Job and Deployment?**
+
+A Deployment keeps Pods running forever and restarts them if they exit. A Job expects Pods to finish, and is done once enough have succeeded.
+
+**4. Difference between Job and CronJob?**
+
+A Job runs once when you create it. A CronJob creates a new Job at each scheduled time and keeps a limited history of them.
+
+**5. What is `backoffLimit`?**
+
+How many times a Job retries failed Pods before marking itself Failed. The default is 6, with exponentially increasing delays between retries.
+
+**6. What is `restartPolicy`?**
+
+What the kubelet does when a container exits: `Always` (Deployments), `OnFailure` or `Never`. Job Pods must use `OnFailure` or `Never`; with `Never`, each retry is a new Pod.
+
+**7. What is `concurrencyPolicy`?**
+
+What a CronJob does if the previous Job is still running at the next scheduled time: `Allow` (default, run both), `Forbid` (skip the new one) or `Replace` (stop the old one, start the new one).
+
+**8. What cron expression runs every two minutes?**
+
+`*/2 * * * *`.
+
+**9. How do you check Job logs?**
+
+`kubectl logs job/<job-name>`, or find its Pod with `kubectl get pods -l job-name=<job-name>` and run `kubectl logs` on it. Logs are available as long as the Pod still exists.
+
+**10. What are common production use cases for CronJobs?**
+
+Backups, report generation, log or temporary-file clean-up, certificate checks and periodic data syncs.
 
 ---
 

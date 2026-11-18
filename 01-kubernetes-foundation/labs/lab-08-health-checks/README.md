@@ -155,16 +155,45 @@ Observation:
 
 # Interview Questions
 
-1. What is a Liveness Probe?
-2. What is a Readiness Probe?
-3. What is a Startup Probe?
-4. When should Startup Probes be used?
-5. Difference between Liveness and Readiness?
-6. Can a Pod be Running but Not Ready?
-7. What happens when a Liveness Probe fails?
-8. What happens when a Readiness Probe fails?
-9. Why are health probes important in production?
-10. What are the best practices for configuring probes?
+**1. What is a Liveness Probe?**
+
+A periodic check that the container is still working. If it fails `failureThreshold` times, the kubelet kills and restarts the container.
+
+**2. What is a Readiness Probe?**
+
+A check that the container can serve traffic. While it fails, the Pod is marked Not Ready and removed from Service endpoints; the container is not restarted.
+
+**3. What is a Startup Probe?**
+
+A check for slow-starting containers. Until it succeeds, liveness and readiness probes don't run; if it never succeeds within `failureThreshold × periodSeconds`, the container is restarted.
+
+**4. When should Startup Probes be used?**
+
+When start-up time is long or varies (JVM apps, large caches, migrations), so you don't have to set a huge `initialDelaySeconds` on the liveness probe.
+
+**5. Difference between Liveness and Readiness?**
+
+Liveness answers "should this container be restarted?"; readiness answers "should this Pod get traffic right now?". Failing liveness restarts; failing readiness only removes it from load balancing.
+
+**6. Can a Pod be Running but Not Ready?**
+
+Yes. The container is running but its readiness probe is failing, for example while warming up or when a dependency is down. `kubectl get pod` shows `0/1` READY with STATUS `Running`.
+
+**7. What happens when a Liveness Probe fails?**
+
+After `failureThreshold` consecutive failures, the kubelet kills the container and restarts it according to `restartPolicy`, increasing the restart count.
+
+**8. What happens when a Readiness Probe fails?**
+
+The Pod's Ready condition turns false and it is removed from the EndpointSlices of every Service that selects it, until the probe passes again.
+
+**9. Why are health probes important in production?**
+
+They let Kubernetes recover hung apps automatically, keep traffic away from Pods that aren't ready, and make rolling updates safe, because new Pods only receive traffic once ready.
+
+**10. What are the best practices for configuring probes?**
+
+Probe a cheap endpoint that reflects the app's own health. Don't make liveness depend on databases or other services. Use a startup probe for slow starts, set realistic timeouts and thresholds, and test the endpoint by hand first.
 
 ---
 

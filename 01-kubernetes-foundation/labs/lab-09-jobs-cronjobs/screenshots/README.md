@@ -1,19 +1,13 @@
 # Lab 09 – Screenshots
 
-Capture the following screenshots while performing the lab.
+Evidence captured during the lab. See the lab's [README](../README.md) and [observations](../observations.md) for what each step shows.
 
-| Screenshot              | Description                                        |
-| ----------------------- | -------------------------------------------------- |
-| 01-job-created.png      | Kubernetes Job created successfully                |
-| 02-job-status.png       | Output of `kubectl get jobs`                       |
-| 03-job-logs.png         | Output of `kubectl logs job/hello-job`             |
-| 04-job-describe.png     | Output of `kubectl describe job hello-job`         |
-| 05-cronjob-created.png  | Output of `kubectl get cronjobs`                   |
-| 06-cronjob-jobs.png     | Jobs created by the CronJob                        |
-| 07-cronjob-logs.png     | Logs of a generated CronJob execution              |
-| 08-cronjob-describe.png | Output of `kubectl describe cronjob hello-cronjob` |
-
----
+- [01-job-created and job-status](01-job-created%20and%20job-status.png)
+- [02-job-describe](02-job-describe.png)
+- [03-job-logs](03-job-logs.png)
+- [04-cronjob-created](04-cronjob-created.png)
+- [05-cronjob-logs](05-cronjob-logs.png)
+- [06-cronjob-describe](06-cronjob-describe.png)
 
 ## Recommended Commands
 
@@ -34,11 +28,3 @@ kubectl describe cronjob hello-cronjob
 ```
 
 ---
-
-## Tips
-
-* Capture both the command and its output in each screenshot.
-* Follow the numbering convention to keep screenshots in chronological order.
-* Ensure the generated CronJob name is visible in the logs and Job list.
-* Verify timestamps are visible where applicable.
-

@@ -1,16 +1,13 @@
 # Lab 08 – Screenshots
 
-Capture the following screenshots during the lab.
+Evidence captured during the lab. See the lab's [README](../README.md) and [observations](../observations.md) for what each step shows.
 
-| Screenshot                  | Description                   |
-| --------------------------- | ----------------------------- |
-| 01-liveness-deployment.png  | Deploy Liveness Probe         |
-| 02-liveness-describe.png    | Liveness Probe details        |
-| 03-readiness-deployment.png | Deploy Readiness Probe        |
-| 04-readiness-describe.png   | Readiness Probe details       |
-| 05-startup-deployment.png   | Deploy Startup Probe          |
-| 06-startup-describe.png     | Startup Probe details         |
-| 07-pod-status.png           | Running Pods after deployment |
+- [01.liveness-probe-created](01.liveness-probe-created.png)
+- [02.readiness-probe-created](02.readiness-probe-created.png)
+- [03.startp-probe-created](03.startp-probe-created.png)
+- [nginx-liveness pod describe](nginx-liveness%20pod%20describe.txt)
+- [nginx-readiness pod describe](nginx-readiness%20pod%20describe.txt)
+- [nginx-startup pod describe](nginx-startup%20pod%20describe.txt)
 
 ## Recommended Commands
 
@@ -20,10 +17,3 @@ kubectl describe pod -l app=nginx-liveness
 kubectl describe pod -l app=nginx-readiness
 kubectl describe pod -l app=nginx-startup
 ```
-
-## Tips
-
-* Include both the executed command and its output.
-* Capture screenshots in chronological order.
-* Use the suggested filenames for consistency.
-

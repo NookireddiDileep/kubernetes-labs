@@ -39,16 +39,13 @@ After completing this lab, you will be able to:
 
 ```
 scenario-03-pending-pod/
-│
-├── README.md
 ├── pending-pod.yaml
+├── README.md
 └── screenshots/
-    ├── 01-pod-created.png
-    ├── 02-pending-status.png
-    ├── 03-describe-pod.png
-    ├── 04-events.png
-    ├── 05-node-labels.png
-    └── 06-running-after-fix.png
+    ├── describe pending pod.PNG
+    ├── describe-events-lables-pending-pod.PNG
+    ├── pending pod.PNG
+    └── running-after-fix.png
 ```
 
 ---

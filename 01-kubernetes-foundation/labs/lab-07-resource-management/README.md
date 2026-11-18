@@ -217,16 +217,45 @@ Increase Memory Limit or Optimize Application
 
 # Interview Questions
 
-1. What is the difference between requests and limits?
-2. How does the Kubernetes Scheduler use resource requests?
-3. What is the purpose of CPU limits?
-4. What causes OOMKilled?
-5. Why is Exit Code 137 associated with OOMKilled?
-6. Explain BestEffort, Burstable, and Guaranteed QoS classes.
-7. What is CrashLoopBackOff?
-8. Difference between `kubectl top` and `kubectl describe`?
-9. Why should production workloads define requests and limits?
-10. How would you troubleshoot a Pod repeatedly restarting?
+**1. What is the difference between requests and limits?**
+
+Requests are what the scheduler reserves for the container and uses to pick a node. Limits are the most the container may use at runtime: CPU above the limit is throttled, memory above the limit gets the container OOM-killed.
+
+**2. How does the Kubernetes Scheduler use resource requests?**
+
+It only places a Pod on a node whose allocatable CPU and memory, minus the requests of Pods already there, can fit the new Pod's requests. Actual usage is not considered.
+
+**3. What is the purpose of CPU limits?**
+
+To cap how much CPU time a container can use per scheduling period (CFS quota), so one busy container can't starve others. Going over causes throttling, not a kill.
+
+**4. What causes OOMKilled?**
+
+The container used more memory than its memory limit, so the kernel's cgroup OOM killer killed it. It can also happen when the whole node runs out of memory.
+
+**5. Why is Exit Code 137 associated with OOMKilled?**
+
+137 = 128 + 9: the process was ended by SIGKILL, which is what the OOM killer sends. The `OOMKilled` reason in the container status is what proves it was memory.
+
+**6. Explain BestEffort, Burstable, and Guaranteed QoS classes.**
+
+BestEffort: no requests or limits at all, evicted first. Burstable: some requests or limits set but not meeting Guaranteed. Guaranteed: every container has CPU and memory requests equal to limits, evicted last. In this lab: no resources gave BestEffort, 100m/500m and 128Mi/256Mi gave Burstable.
+
+**7. What is CrashLoopBackOff?**
+
+A container keeps failing after starting, so the kubelet restarts it with an increasing delay (10 s, 20 s, 40 s… up to 5 minutes). In this lab it followed each OOMKill.
+
+**8. Difference between `kubectl top` and `kubectl describe`?**
+
+`kubectl top` shows live usage from metrics-server. `kubectl describe` shows what was configured (requests, limits, QoS class) plus status and events.
+
+**9. Why should production workloads define requests and limits?**
+
+Requests make scheduling accurate and protect Pods from noisy neighbours; limits contain leaks and runaway processes. Without them you get overcommitted nodes, surprise evictions and unpredictable latency.
+
+**10. How would you troubleshoot a Pod repeatedly restarting?**
+
+Check `kubectl get pod` (restart count), `kubectl describe pod` (last state, reason, exit code, events), `kubectl logs --previous`, then decide: OOMKilled points to memory, a failing liveness probe to probe config, a non-zero exit code to the app or its config.
 
 ---
 

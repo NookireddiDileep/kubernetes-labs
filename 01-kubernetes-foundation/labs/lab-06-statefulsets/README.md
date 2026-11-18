@@ -268,16 +268,45 @@ nginx-stateful-0.nginx-headless.default.svc.cluster.local
 
 # Interview Questions
 
-1. Why use StatefulSets instead of Deployments?
-2. What is a Headless Service?
-3. Why does StatefulSet require a Headless Service?
-4. What are volumeClaimTemplates?
-5. Why does every StatefulSet Pod have its own PVC?
-6. What happens during StatefulSet scale-down?
-7. Why are PVCs retained?
-8. How does StatefulSet provide stable DNS?
-9. Explain OrderedReady.
-10. Which production applications require StatefulSets?
+**1. Why use StatefulSets instead of Deployments?**
+
+For workloads that need a stable identity: fixed Pod names (`-0`, `-1`), stable DNS per Pod, a dedicated PVC per replica and ordered start, scale and update. Deployments give interchangeable Pods with shared or no storage.
+
+**2. What is a Headless Service?**
+
+A Service with `clusterIP: None`. Instead of one virtual IP, DNS returns the Pod IPs and creates a record per Pod.
+
+**3. Why does StatefulSet require a Headless Service?**
+
+The StatefulSet's `serviceName` points at it to give each Pod a stable DNS name like `nginx-stateful-0.nginx-headless.default.svc.cluster.local`, so peers can find each other by name.
+
+**4. What are volumeClaimTemplates?**
+
+PVC templates in the StatefulSet spec. Each replica gets its own claim, named `<template>-<pod>`, such as `nginx-storage-nginx-stateful-2` in this lab.
+
+**5. Why does every StatefulSet Pod have its own PVC?**
+
+So each replica keeps its own data, which databases and quorum systems need. The PVC follows the Pod's identity: `pod-0` always gets the same claim back after it is recreated.
+
+**6. What happens during StatefulSet scale-down?**
+
+Pods are removed in reverse order, highest ordinal first, one at a time; their PVCs are kept by default.
+
+**7. Why are PVCs retained?**
+
+To protect data. By default (`persistentVolumeClaimRetentionPolicy` = `Retain`), PVCs survive scale-down and deletion, so scaling up again reattaches the same data. You can set `Delete` instead.
+
+**8. How does StatefulSet provide stable DNS?**
+
+Each Pod gets a predictable hostname and an A record through the headless Service: `<pod>.<service>.<namespace>.svc.cluster.local`. The name stays the same even when the Pod's IP changes.
+
+**9. Explain OrderedReady.**
+
+The default `podManagementPolicy`: Pods are created one at a time in order, and each must be Running and Ready before the next starts; deletion happens in reverse order. `Parallel` skips the waiting.
+
+**10. Which production applications require StatefulSets?**
+
+Databases and clustered systems that need stable identity or storage: PostgreSQL, MySQL, MongoDB, Kafka, ZooKeeper, Elasticsearch, etcd, Redis with persistence.
 
 ---
 

@@ -1,19 +1,11 @@
 # Lab 10 – Screenshots
 
-Capture the following screenshots while performing the lab.
+Evidence captured during the lab. See the lab's [README](../README.md) and [observations](../observations.md) for what each step shows.
 
-| Screenshot                     | Description                             |
-| ------------------------------ | --------------------------------------- |
-| 01-serviceaccount-created.png  | Output of `kubectl get serviceaccounts` |
-| 02-serviceaccount-describe.png | Details of `pod-reader` ServiceAccount  |
-| 03-role-created.png            | Output of `kubectl get roles`           |
-| 04-role-describe.png           | Details of `pod-reader-role`            |
-| 05-rolebinding-created.png     | Output of `kubectl get rolebindings`    |
-| 06-rolebinding-describe.png    | Details of `pod-reader-binding`         |
-| 07-auth-can-i-get.png          | `kubectl auth can-i get pods` result    |
-| 08-auth-can-i-delete.png       | `kubectl auth can-i delete pods` result |
-
----
+- [FInal-verication](FInal-verication.png)
+- [role](role.png)
+- [rolebinding](rolebinding.png)
+- [serviceaccount](serviceaccount.png)
 
 ## Recommended Commands
 
@@ -36,11 +28,3 @@ kubectl auth can-i delete pods --as=system:serviceaccount:default:pod-reader
 ```
 
 ---
-
-## Tips
-
-* Include both the executed command and its output in every screenshot.
-* Ensure the ServiceAccount, Role, and RoleBinding names are clearly visible.
-* Capture the `yes` and `no` results from the permission checks.
-* Keep screenshots in numerical order to match the documentation.
-

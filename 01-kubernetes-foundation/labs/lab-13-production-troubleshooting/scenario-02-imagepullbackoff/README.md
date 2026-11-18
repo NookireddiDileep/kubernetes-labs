@@ -38,15 +38,13 @@ After completing this lab, you will be able to:
 
 ```text
 scenario-02-imagepullbackoff/
-├── README.md
 ├── imagepull.yaml
+├── README.md
 └── screenshots/
-    ├── 01-pod-created.png
-    ├── 02-errimagepull.png
-    ├── 03-imagepullbackoff.png
-    ├── 04-describe-pod.png
-    ├── 05-logs-error.png
-    └── 06-pod-running.png
+    ├── describe pod imagepull-demo.PNG
+    ├── imagepulloff pod created and pod status.PNG
+    ├── pod is running post fix.PNG
+    └── verify pod logs.PNG
 ```
 
 ---
@@ -261,27 +259,69 @@ ImagePullBackOff
 
 ## Basic
 
-1. What is ImagePullBackOff?
-2. What causes ImagePullBackOff?
-3. What is ErrImagePull?
-4. Which command provides the root cause?
-5. Why are logs unavailable?
+**1. What is ImagePullBackOff?**
+
+A status meaning the kubelet failed to pull the container image and is waiting, with a growing delay, before trying again.
+
+**2. What causes ImagePullBackOff?**
+
+A wrong image name or tag, a missing or deleted image, private-registry authentication failures, no network or DNS to the registry, or rate limits.
+
+**3. What is ErrImagePull?**
+
+The first failed pull attempt. After repeated `ErrImagePull` failures, the Pod moves to `ImagePullBackOff`.
+
+**4. Which command provides the root cause?**
+
+`kubectl describe pod <pod>`: the events show the exact error, for example `not found`, `unauthorized` or `i/o timeout`.
+
+**5. Why are logs unavailable?**
+
+The container never started, so there is no application output. The useful information is in the events.
 
 ## Intermediate
 
-6. Difference between ErrImagePull and ImagePullBackOff?
-7. How does Kubernetes retry image downloads?
-8. What information is available in Pod Events?
-9. How would you troubleshoot a private registry failure?
-10. What is the purpose of imagePullSecrets?
+**6. Difference between ErrImagePull and ImagePullBackOff?**
+
+`ErrImagePull` is the immediate failure of an attempt; `ImagePullBackOff` is the waiting state between retries.
+
+**7. How does Kubernetes retry image downloads?**
+
+With exponential backoff, the delay doubling between attempts up to a 5-minute cap, retrying indefinitely until the pull succeeds or the Pod is changed.
+
+**8. What information is available in Pod Events?**
+
+The reason and timing of each step: scheduled, pulling, failed with the registry's error, back-off. They are kept for about an hour by default.
+
+**9. How would you troubleshoot a private registry failure?**
+
+Read the event (an `unauthorized` or `denied` error), check the Pod has `imagePullSecrets` (or its ServiceAccount does) in the same namespace, check the secret's registry URL and credentials, and test with `crictl pull` on the node.
+
+**10. What is the purpose of imagePullSecrets?**
+
+They give the kubelet the registry credentials it needs to pull private images.
 
 ## Advanced
 
-11. How would you prevent ImagePullBackOff in production?
-12. Why should production workloads avoid the `latest` tag?
-13. How do Kubernetes nodes cache images?
-14. What happens if the registry is temporarily unavailable?
-15. How would you debug intermittent image pull failures across multiple nodes?
+**11. How would you prevent ImagePullBackOff in production?**
+
+Pin image tags or digests, check images exist in CI before deploying, use a registry mirror or cache, manage pull secrets centrally, and watch for pull errors.
+
+**12. Why should production workloads avoid the `latest` tag?**
+
+`latest` changes under you: different nodes can run different code, rollbacks don't really roll back, and `imagePullPolicy: Always` adds a registry dependency to every start.
+
+**13. How do Kubernetes nodes cache images?**
+
+The container runtime keeps pulled image layers on the node. With `IfNotPresent`, a cached image is reused; the kubelet garbage-collects unused images when disk usage is high.
+
+**14. What happens if the registry is temporarily unavailable?**
+
+New pulls fail. Pods whose image is already cached on the node and use `IfNotPresent` still start; new nodes and `Always` pulls fail until the registry returns.
+
+**15. How would you debug intermittent image pull failures across multiple nodes?**
+
+Compare which nodes fail, using `kubectl get events` across Pods. On a failing node, try `crictl pull`, check DNS, proxy and firewall rules and disk space, and look for registry rate limits or one bad mirror.
 
 ---
 

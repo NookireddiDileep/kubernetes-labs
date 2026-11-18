@@ -229,16 +229,45 @@ screenshots/
 
 ## Interview Questions
 
-1. What is a Kubernetes Secret?
-2. How is a Secret different from a ConfigMap?
-3. Is Base64 encoding considered encryption?
-4. What are the different Secret types in Kubernetes?
-5. How can Secrets be consumed by Pods?
-6. What is the difference between `data` and `stringData`?
-7. Can Secrets be mounted as files?
-8. How are Secrets stored in etcd?
-9. How do you secure Secrets in a production Kubernetes cluster?
-10. What are common methods for Secret rotation?
+**1. What is a Kubernetes Secret?**
+
+An API object for small amounts of sensitive data such as passwords, tokens and keys, delivered to Pods as environment variables or files.
+
+**2. How is a Secret different from a ConfigMap?**
+
+A Secret is meant for sensitive data: it is base64-encoded, can be encrypted at rest in etcd, is usually restricted more tightly by RBAC and is mounted on tmpfs. A ConfigMap holds non-sensitive plain text.
+
+**3. Is Base64 encoding considered encryption?**
+
+No. Base64 is an encoding that anyone can reverse with `base64 -d`. Real protection comes from RBAC, encryption at rest and an external secret manager.
+
+**4. What are the different Secret types in Kubernetes?**
+
+`Opaque` (generic), `kubernetes.io/tls`, `kubernetes.io/dockerconfigjson` (image pull credentials), `kubernetes.io/basic-auth`, `kubernetes.io/ssh-auth` and `kubernetes.io/service-account-token`.
+
+**5. How can Secrets be consumed by Pods?**
+
+As environment variables (`secretKeyRef` or `envFrom`), as files through a volume, or by the kubelet itself, for example as `imagePullSecrets`.
+
+**6. What is the difference between `data` and `stringData`?**
+
+`data` takes base64-encoded values; `stringData` takes plain text and the API server encodes it into `data` for you. `stringData` is write-only and convenient in manifests.
+
+**7. Can Secrets be mounted as files?**
+
+Yes. Each key becomes a file in the mounted directory (on tmpfs), and mounted Secrets are refreshed when the Secret changes.
+
+**8. How are Secrets stored in etcd?**
+
+Base64-encoded and, by default, unencrypted. Enabling an `EncryptionConfiguration` (or a KMS provider) encrypts them at rest.
+
+**9. How do you secure Secrets in a production Kubernetes cluster?**
+
+Least-privilege RBAC on `secrets`, encryption at rest, no secrets in Git (use Sealed Secrets, External Secrets Operator or Vault), mounted files instead of environment variables where possible, audit logging, and rotation.
+
+**10. What are common methods for Secret rotation?**
+
+Update the Secret and restart the Pods that read it as environment variables, rely on volume mounts refreshing, or let an external secret manager (Vault, External Secrets Operator) rotate it on a schedule.
 
 ---
 
