@@ -49,6 +49,10 @@ Every lab is done on a cluster I built and run myself, with manifests, validatio
 
 ## Related repositories
 
-- [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records): OpenShift labs, Jira-style stories and RCAs on multi-node clusters
-- [infra-automation-lab](https://github.com/NookireddiDileep/infra-automation-lab): Bash, Ansible, Python and Go automation
-- [project-arohan-ai](https://github.com/NookireddiDileep/project-arohan-ai): AI infrastructure track
+Part of one hands-on platform-engineering portfolio. Start at my [GitHub profile](https://github.com/NookireddiDileep) for the overview.
+
+| Repo | What's there |
+|---|---|
+| [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records) | OpenShift 4.x on multi-node clusters: Jira-style stories, RCAs, break-fix runbooks, `oc` command bank, OpenShift vs Kubernetes guide |
+| [infra-automation-lab](https://github.com/NookireddiDileep/infra-automation-lab) | One real ops scenario a day, solved in Bash, Ansible, Python and Go against the same golden tests |
+| [project-arohan-ai](https://github.com/NookireddiDileep/project-arohan-ai) | AI infrastructure track: Linux internals, OpenShift vs Kubernetes, GPU scheduling, inference reliability, Prometheus SLOs |
