@@ -21,7 +21,7 @@ After completing this lab, you will be able to:
 * Troubleshoot image download failures.
 * Interpret Kubernetes Events related to image pulls.
 * Recover workloads by correcting container image references.
-* Understand why Pods must be recreated after modifying immutable fields.
+* Know which Pod fields can be changed in place (image) and which require recreating the Pod.
 
 ---
 
@@ -165,7 +165,7 @@ Update the image.
 image: nginx:latest
 ```
 
-Since Pods are immutable, modifying the manifest alone is not sufficient.
+`image` is one of the few Pod fields that **can** be changed in place (`kubectl set image pod/<name> <container>=<image>` or `kubectl apply` with the new tag). For a clean run, the Pod was deleted and recreated instead.
 
 Delete the existing Pod.
 
@@ -287,14 +287,12 @@ ImagePullBackOff
 
 # Screenshots
 
-Capture the following screenshots.
+Evidence captured during this scenario:
 
-* 01-pod-created.png
-* 02-errimagepull.png
-* 03-imagepullbackoff.png
-* 04-describe-pod.png
-* 05-logs-error.png
-* 06-pod-running.png
+- [describe pod imagepull demo](screenshots/describe%20pod%20imagepull-demo.PNG)
+- [imagepulloff pod created and pod status](screenshots/imagepulloff%20pod%20created%20and%20pod%20status.PNG)
+- [pod is running post fix](screenshots/pod%20is%20running%20post%20fix.PNG)
+- [verify pod logs](screenshots/verify%20pod%20logs.PNG)
 
 ---
 
@@ -304,6 +302,6 @@ Capture the following screenshots.
 * `ImagePullBackOff` indicates Kubernetes is retrying image downloads with an exponential back-off strategy.
 * `kubectl describe pod` is the primary troubleshooting command for image pull failures.
 * Application logs are unavailable because the container never starts.
-* Correcting the image reference and recreating the Pod resolves the issue.
+* Correcting the image reference (in place, or by recreating the Pod) resolves the issue.
 * Using immutable image tags and validating registry access helps prevent production deployment failures.
 

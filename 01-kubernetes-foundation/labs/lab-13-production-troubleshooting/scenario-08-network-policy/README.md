@@ -27,7 +27,7 @@ After completing this lab, you will be able to:
 | Component | Details |
 |------------|---------|
 | Kubernetes Distribution | K3s |
-| Kubernetes Version | v1.36.x |
+| Kubernetes Version | v1.36.2+k3s1 |
 | Operating System | Ubuntu 24.04 LTS |
 | Container Runtime | containerd |
 | Cloud Platform | Google Cloud Platform (GCP) |

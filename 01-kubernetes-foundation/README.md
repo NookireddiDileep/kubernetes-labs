@@ -11,7 +11,7 @@
 | **Storage** | `local-path` provisioner (default StorageClass) |
 | **Evidence** | 45 manifests · 128 screenshots · one `observations.md` per lab |
 
-> **Scope, honestly:** this is a single-node lab cluster, so it can't show multi-node scheduling, node failure or control-plane HA. Those are practised in [module 02 incident drills](../02-incident-drills/README.md) and on multi-node OpenShift in [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records).
+> **Scope, honestly:** this is a single-node lab cluster, so it can't show multi-node scheduling, node failure or control-plane HA. Those are the focus of [module 02 incident drills](../02-incident-drills/README.md) (starting) and are practised on multi-node OpenShift in [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records).
 
 ---
 
@@ -86,5 +86,5 @@ kubectl top pods && kubectl top nodes                      # live usage (metrics
 
 ## Next
 
-- **[Module 02 — Incident drills](../02-incident-drills/README.md)** 🟢 timed live-outage drills on multi-node clusters, with my own RCAs
+- **[Module 02 — Incident drills](../02-incident-drills/README.md)** 🟡 (set up, no drills logged yet) timed live-outage drills on multi-node clusters, with my own RCAs
 - **Module 03 — Helm** ⏳ charts, values, templating, releases and rollbacks

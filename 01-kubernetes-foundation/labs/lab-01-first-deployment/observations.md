@@ -1,25 +1,3 @@
-# Lab 01 - Observations
-
-## Objective
-Deploy an NGINX application using a Kubernetes Deployment manifest.
-
-## Observations
-- Created a dedicated namespace named `demo`.
-- Applied a Deployment manifest using `kubectl apply`.
-- Deployment automatically created a ReplicaSet.
-- ReplicaSet automatically created a Pod.
-- Pod was scheduled to the control-plane node.
-- Pod received an internal cluster IP.
-- After manually deleting the Pod, the ReplicaSet automatically created a replacement Pod.
-- Deployment maintained the desired state of one replica throughout the exercise.
-
-## Key Learnings
-- Deployments manage ReplicaSets.
-- ReplicaSets manage Pods.
-- Pods are ephemeral and can be replaced.
-- Kubernetes continuously reconciles actual state with desired state.
-########################################
-
 # Lab 01 – Observations
 
 ## Environment

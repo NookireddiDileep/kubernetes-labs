@@ -27,11 +27,11 @@ After completing this lab, you will be able to:
 | Component | Details |
 |------------|---------|
 | Kubernetes Distribution | K3s |
-| Kubernetes Version | v1.36.x |
+| Kubernetes Version | v1.36.2+k3s1 |
 | Operating System | Ubuntu 24.04 LTS |
 | Container Runtime | containerd |
 | Cloud Platform | Google Cloud Platform (GCP) |
-| Architecture | Single Node Control Plane |
+| Architecture | Single node (control plane and workloads) |
 
 ---
 
@@ -261,14 +261,12 @@ pending-demo   1/1   Running
 
 # 📸 Screenshots
 
-| Screenshot | Description |
-|------------|-------------|
-| 01-pod-created.png | Pod creation |
-| 02-pending-status.png | Pod in Pending state |
-| 03-describe-pod.png | Describe Pod output |
-| 04-events.png | Scheduler events |
-| 05-node-labels.png | Node labels |
-| 06-running-after-fix.png | Pod running after fix |
+Evidence captured during this scenario:
+
+- [describe pending pod](screenshots/describe%20pending%20pod.PNG)
+- [describe events lables pending pod](screenshots/describe-events-lables-pending-pod.PNG)
+- [pending pod](screenshots/pending%20pod.PNG)
+- [running after fix](screenshots/running-after-fix.png)
 
 ---
 

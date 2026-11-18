@@ -353,14 +353,13 @@ CrashLoopBackOff
 
 # Screenshots
 
-Capture the following screenshots:
+Evidence captured during this scenario:
 
-* `01-pod-created.png`
-* `02-crashloopbackoff.png`
-* `03-describe-pod.png`
-* `04-pod-logs.png`
-* `05-pod-update-error.png`
-* `06-pod-running.png`
+- [02 pod created and crashloop status](screenshots/01%2002-pod-created%20and%20crashloop%20status.png)
+- [describe pod](screenshots/03-describe-pod.png)
+- [events](screenshots/04-events.png)
+- [pod update error](screenshots/05-pod-update-error.png)
+- [pod running after error fix](screenshots/06-pod-running-after-error-fix.png)
 
 ---
 

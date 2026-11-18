@@ -174,7 +174,7 @@ Verification:
 
 ---
 
-## Step 5 – Test External Access
+## Step 5 – Test Access Through the Ingress
 
 Command:
 
@@ -185,7 +185,7 @@ curl http://10.160.0.2/
 Verification:
 
 * Received the default **Welcome to nginx!** page
-* Confirmed successful routing from the Ingress Controller to the application
+* Confirmed successful routing from the Ingress Controller to the application (tested with `curl` against the node's private IP from inside the VM)
 
 ---
 

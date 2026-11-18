@@ -175,8 +175,8 @@ Observation:
 | QoS        | Requests | Limits               | Typical Usage                 |
 | ---------- | -------- | -------------------- | ----------------------------- |
 | BestEffort | None     | None                 | Test workloads                |
-| Burstable  | Defined  | Higher than requests | Most production applications  |
-| Guaranteed | Equal    | Equal                | Critical production workloads |
+| Burstable  | At least one request or limit set | Not equal to requests, or not set for every container | Most production applications  |
+| Guaranteed | CPU and memory set for every container | Equal to requests | Critical production workloads |
 
 ---
 

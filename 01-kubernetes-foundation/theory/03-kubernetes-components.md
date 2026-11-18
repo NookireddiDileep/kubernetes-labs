@@ -5,14 +5,14 @@
 - API Server
 - Scheduler
 - Controller Manager
-- Embedded etcd (K3s)
+- Datastore: SQLite via kine (single-server K3s default; embedded etcd only with `--cluster-init` for HA)
 
 ---
 
 ## Worker Node
 
 - kubelet
-- kube-proxy (implementation may vary in K3s)
+- kube-proxy (runs inside the `k3s` process, not as a separate Pod)
 - containerd
 
 ---
@@ -23,6 +23,9 @@
 - Metrics Server
 - Traefik
 - Local Path Provisioner
+- ServiceLB (klipper-lb)
+- Network policy controller (kube-router based)
+- Flannel CNI (built into the `k3s` process)
 
 ---
 

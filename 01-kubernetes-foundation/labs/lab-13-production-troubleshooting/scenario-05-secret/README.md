@@ -157,7 +157,7 @@ Create the missing Secret.
 kubectl apply -f secret.yaml
 ```
 
-Restart the Deployment.
+No restart is strictly needed: the kubelet keeps retrying a Pod in `CreateContainerConfigError`, so it starts on its own once the missing object exists. A restart just makes it immediate:
 
 ```bash
 kubectl rollout restart deployment secret-demo
@@ -450,17 +450,14 @@ kubectl exec -it <pod-name> -- env | grep DB
 
 # Screenshots
 
-Store screenshots in:
+Evidence captured during this scenario:
 
-```text
-screenshots/
-├── 01-createcontainerconfigerror.png
-├── 02-describe-pod-error.png
-├── 03-secret-list.png
-├── 04-secret-created.png
-├── 05-pod-running.png
-└── 06-env-verification.png
-```
+- [createcontainerconfigerror](screenshots/01-createcontainerconfigerror.png)
+- [describe pod](screenshots/02-describe-pod.png)
+- [secret list](screenshots/03-secret-list.png)
+- [secret created](screenshots/04-secret-created.png)
+- [pod running](screenshots/05-pod-running.png)
+- [env verification](screenshots/06-env-verification.png)
 
 ---
 

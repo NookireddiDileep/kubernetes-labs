@@ -6,6 +6,23 @@ This changelog follows the principles of semantic versioning and documents major
 
 ---
 
+## [v1.0.2] - 2026-11-18
+
+### 🔍 End-to-end technical review
+
+- **Lab 01:** removed a duplicated older copy of `observations.md`.
+- **Lab 07:** QoS table now gives the real rules for Burstable and Guaranteed.
+- **Lab 08:** a failing startup probe restarts the container; it doesn't just "delay liveness".
+- **Lab 11:** quota troubleshooting corrected: when a quota blocks a Deployment, no Pods are created (`FailedCreate` on the ReplicaSet), rather than Pods staying Pending.
+- **Lab 12:** "external access" was a `curl` to the node's private IP from the VM; wording and the ServiceLB role now say so.
+- **Lab 13:** scenario 02 no longer claims a Pod's image can't be changed in place; scenarios 04/05 explain the restart is optional; scenario 04's imperative/declarative examples now use a ConfigMap (they were Secrets); scenario 09 explains exit code 137 as SIGKILL and notes that `oom-demo.yaml` is the fixed manifest; scenario 07 notes `local-path` data doesn't survive node loss; screenshot sections in scenarios 01–07 now link the real files; Kubernetes version pinned to `v1.36.2+k3s1`.
+- **Interview cheat sheet:** gRPC probes, `WaitForFirstConsumer`, K3s NetworkPolicy enforcement, exit code 137.
+- **theory/:** request flow now shows authn → authz → admission → datastore → controllers → scheduler → kubelet; components list fixed for K3s (SQLite, not etcd, on a single server); removed the scaffolding file `Module_Structure.md`.
+- **ARCHITECTURE.md:** new "How K3s differs" table; admission order corrected; NetworkPolicy note corrected.
+- **Module 02:** status changed from "ongoing" to "set up, no drills logged yet", here and in the repo README.
+
+---
+
 ## [v1.0.1] - 2026-11-18
 
 ### 📝 Documentation fixes
@@ -153,7 +170,7 @@ Prepared documentation covering:
 
 ### 🚀 Next Milestone
 
-The next modules in the roadmap are **02 – Incident Drills** (ongoing) and then:
+The next modules in the roadmap are **02 – Incident Drills** (set up, no drills logged yet) and then:
 
 **03 – Helm Package Management**
 

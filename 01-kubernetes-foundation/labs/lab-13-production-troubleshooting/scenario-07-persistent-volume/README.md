@@ -270,7 +270,7 @@ Examples include:
 - Elasticsearch
 - Kafka
 
-Persistent Volumes ensure that application data survives Pod restarts, node failures, and rolling updates.
+Persistent Volumes keep application data across Pod restarts and rolling updates. Surviving a **node** failure depends on the storage backend: network or replicated storage (CSI) does; node-local storage such as K3s `local-path` does not.
 
 Incorrect storage configuration can delay deployments, impact application availability, and increase recovery time during incidents.
 
@@ -344,14 +344,13 @@ kubectl apply -f deployment.yaml
 
 # Screenshots
 
-```
-screenshots/
-├── 01-pvc-pending.png
-├── 02-pod-pending.png
-├── 03-describe-pvc.png
-├── 04-pvc-bound.png
-├── 05-pod-running.png
-```
+Evidence captured during this scenario:
+
+- [pvc pending](screenshots/01-pvc-pending.png)
+- [pod pending](screenshots/02-pod-pending.png)
+- [describe pvc](screenshots/03-describe-pvc.png)
+- [pvc bound](screenshots/04-pvc-bound.png)
+- [pod running](screenshots/05-pod-running.png)
 
 ---
 

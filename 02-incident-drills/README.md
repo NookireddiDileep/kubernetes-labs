@@ -2,6 +2,8 @@
 
 Timed break-fix drills on **live, multi-node Kubernetes clusters** with real production-style outages, practised on a live-outage training platform (InfraThrone DevOps Park). They cover what my single-node K3s lab can't: multi-node networking, scheduling across nodes, and multi-cause incidents.
 
+> **Status:** method and RCA template ready; no drills logged yet. Rows appear in the drill log below as drills are completed.
+
 ## Method (every drill)
 
 1. Read the incident brief and **start a 30-minute timer**.

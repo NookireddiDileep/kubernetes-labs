@@ -488,18 +488,15 @@ kubectl rollout status deployment probe-demo
 
 # Screenshots
 
-Store screenshots in:
+Evidence captured during this scenario:
 
-```text
-screenshots/
-├── 01-deployment-created.png
-├── 02-pod-restarting.png
-├── 03-describe-pod.png
-├── 04-events.png
-├── 05-curl-health-check.png
-├── 06-fixed-probe.png
-└── 07-pod-running.png
-```
+- [deployment created](screenshots/01-deployment-created.png)
+- [pod restarting](screenshots/02-pod-restarting.png)
+- [describe pod](screenshots/03-describe-pod.png)
+- [events](screenshots/04-events.png)
+- [curl health check](screenshots/05-curl-health-check.png)
+- [probe fixed](screenshots/06-probe-fixed.png)
+- [pod running](screenshots/07-pod-running.png)
 
 ---
 
