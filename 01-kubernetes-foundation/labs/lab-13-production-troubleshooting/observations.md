@@ -266,13 +266,14 @@ Persistent storage depends on correctly configured StorageClasses and available 
 
 ## Observation
 
-- Verified Pod-to-Pod communication before and after applying a NetworkPolicy.
+- Verified Pod-to-Pod communication before and after applying a `deny-all-ingress` NetworkPolicy on `app: nginx`.
+- Before: BusyBox reached NGINX. After: `wget` failed with `Connection refused` (exit code 1).
 
 ## Root Cause
 
-A NetworkPolicy defines traffic rules, but enforcement depends on the installed CNI plugin.
+A NetworkPolicy defines traffic rules; a policy engine on each node enforces them.
 
-In the default K3s environment using Flannel, NetworkPolicies are created successfully but are **not enforced** without a compatible policy engine.
+Default K3s pairs Flannel (which has no policy support) with an **embedded kube-router network policy controller**, so the policy **was enforced** and ingress to NGINX was blocked.
 
 ## Investigation Commands
 
@@ -284,11 +285,11 @@ kubectl get pods --show-labels
 
 ## Resolution
 
-Validated policy configuration and documented the dependency on CNI support.
+Confirmed the policy selected the NGINX pod by label and that traffic was blocked; removed the policy during cleanup to restore access.
 
 ## Key Learning
 
-NetworkPolicies require a compatible CNI plugin (such as Calico, Cilium, Antrea, or OVN-Kubernetes) for enforcement.
+NetworkPolicies need a policy engine: a policy-capable CNI (Calico, Cilium, Antrea, OVN-Kubernetes) or a separate controller such as the one K3s embeds. Without one, policies are accepted but ignored.
 
 ---
 

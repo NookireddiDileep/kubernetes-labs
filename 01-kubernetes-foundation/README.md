@@ -1,336 +1,90 @@
-# ☸️ Kubernetes Foundation
+# ☸️ Module 01 — Kubernetes Foundation
 
-> **A comprehensive, production-oriented Kubernetes learning path covering core concepts, workload management, networking, storage, security, resource optimization, and real-world troubleshooting for Platform Engineers.**
+**13 hands-on labs and 9 break-and-fix troubleshooting scenarios on a K3s cluster I built and run myself.** Every lab has its manifests, validation screenshots and an `observations.md` with what I saw, what broke and how I fixed it.
 
----
+| | |
+|---|---|
+| **Status** | ✅ Complete (v1.0.0, July 2026) · [changelog](CHANGELOG.md) |
+| **Cluster** | Single-node K3s `v1.36.2+k3s1`; the one server node also runs workloads |
+| **Platform** | Ubuntu 24.04 LTS VM on Google Cloud, containerd runtime |
+| **Networking** | Flannel CNI, K3s embedded network policy controller, Traefik ingress |
+| **Storage** | `local-path` provisioner (default StorageClass) |
+| **Evidence** | 45 manifests · 128 screenshots · one `observations.md` per lab |
 
-# 📖 Overview
-
-The **Kubernetes Foundation** module is the first phase of the **Platform Engineer Lab 2026** roadmap. It provides a structured learning journey from Kubernetes fundamentals to production troubleshooting through hands-on labs designed to mirror real-world engineering scenarios.
-
-Rather than focusing only on deployments, this module emphasizes understanding **how Kubernetes works internally, how applications are operated in production, and how failures are investigated and resolved**.
-
-Each lab includes:
-
-- 📘 Detailed README documentation
-- 🛠️ Hands-on implementation
-- 📸 Validation screenshots
-- 🔍 Observations and key learnings
-- 💡 Production best practices
-- 🎤 Interview preparation
-- 🚨 Troubleshooting guidance
+> **Scope, honestly:** this is a single-node lab cluster, so it can't show multi-node scheduling, node failure or control-plane HA. Those are practised in [module 02 incident drills](../02-incident-drills/README.md) and on multi-node OpenShift in [openshift-lab-records](https://github.com/NookireddiDileep/openshift-lab-records).
 
 ---
 
-# 📊 Module Progress
+## Labs
 
-| Metric | Value |
-|---------|------:|
-| Total Labs | **13** |
-| Production Troubleshooting Scenarios | **9** |
-| Kubernetes Concepts Covered | **20+** |
-| Interview Questions | **50+** |
-| Documentation Files | **20+** |
-| Status | **✅ Completed** |
+| # | Lab | What I did |
+|---|---|---|
+| 01 | [First deployment](labs/lab-01-first-deployment/README.md) | Deployment → ReplicaSet → Pods; deleted pods and watched self-healing |
+| 02 | [Services](labs/lab-02-services/README.md) | ClusterIP Service, label selectors, EndpointSlices tracking pods as they change |
+| 03 | [ConfigMaps](labs/lab-03-configmaps/README.md) | ConfigMap values injected as environment variables |
+| 04 | [Secrets](labs/lab-04-secrets/README.md) | Secrets as env vars; base64 is encoding, not encryption |
+| 05 | [Persistent storage](labs/lab-05-persistent-volumes/README.md) | Static PV/PVC and dynamic provisioning; data survived pod recreation |
+| 06 | [StatefulSets](labs/lab-06-statefulsets/README.md) | Stable names and per-pod storage with a headless Service |
+| 07 | [Requests & limits](labs/lab-07-resource-management/README.md) | BestEffort vs Burstable QoS; forced an OOMKill |
+| 08 | [Health checks](labs/lab-08-health-checks/README.md) | Liveness, readiness and startup probes |
+| 09 | [Jobs & CronJobs](labs/lab-09-jobs-cronjobs/README.md) | Run-to-completion and scheduled workloads |
+| 10 | [RBAC](labs/lab-10-rbac/README.md) | ServiceAccount, Role, RoleBinding; verified with `kubectl auth can-i --as` |
+| 11 | [Namespaces & quotas](labs/lab-11-namespaces/README.md) | ResourceQuota and LimitRange in a `development` namespace |
+| 12 | [Ingress](labs/lab-12-ingress/README.md) | Path routing to a ClusterIP Service through the bundled Traefik controller |
+| 13 | [Production troubleshooting](labs/lab-13-production-troubleshooting/README.md) | 9 break-and-fix scenarios, below |
 
----
+## Lab 13: break-and-fix scenarios
 
-# 🎯 Learning Objectives
+Each scenario was broken on purpose, diagnosed from symptoms only, fixed and written up. Summary of all nine: [observations.md](labs/lab-13-production-troubleshooting/observations.md).
 
-After completing this module, you will be able to:
+| # | Scenario | Root cause I found |
+|---|---|---|
+| 01 | [CrashLoopBackOff](labs/lab-13-production-troubleshooting/scenario-01-crashloop/README.md) | Container command exited with code 1 at start-up |
+| 02 | [ImagePullBackOff](labs/lab-13-production-troubleshooting/scenario-02-imagepullbackoff/README.md) | Image tag that doesn't exist in the registry |
+| 03 | [Pending pod](labs/lab-13-production-troubleshooting/scenario-03-pending-pod/README.md) | `nodeSelector` matched no node labels |
+| 04 | [ConfigMap error](labs/lab-13-production-troubleshooting/scenario-04-configmap/README.md) | Pod referenced a ConfigMap that didn't exist |
+| 05 | [Secret error](labs/lab-13-production-troubleshooting/scenario-05-secret/README.md) | Pod referenced a Secret that didn't exist |
+| 06 | [Probe failures](labs/lab-13-production-troubleshooting/scenario-06-liveness-readiness/README.md) | Liveness probe checked `/health`, but NGINX only serves `/`, so the kubelet kept restarting a healthy app |
+| 07 | [PVC stuck Pending](labs/lab-13-production-troubleshooting/scenario-07-persistent-volume/README.md) | PVC asked for a StorageClass that doesn't exist in the cluster |
+| 08 | [NetworkPolicy](labs/lab-13-production-troubleshooting/scenario-08-network-policy/README.md) | `deny-all-ingress` on `app: nginx` blocked BusyBox → NGINX, enforced by K3s's embedded policy controller |
+| 09 | [OOMKilled](labs/lab-13-production-troubleshooting/scenario-09-resource-limits/README.md) | App exceeded its memory limit; the kernel's cgroup OOM killer ended it (exit 137) |
 
-- Understand Kubernetes architecture and control plane components
-- Deploy and manage containerized applications
-- Work with Pods, ReplicaSets, Deployments, and Services
-- Configure applications using ConfigMaps and Secrets
-- Manage persistent storage using PVs and PVCs
-- Deploy stateful workloads with StatefulSets
-- Organize workloads using Namespaces
-- Understand RBAC fundamentals
-- Configure Resource Requests and Limits
-- Diagnose and troubleshoot production issues
-- Apply a structured Root Cause Analysis (RCA) methodology
-- Prepare for Kubernetes, OpenShift, and Platform Engineering interviews
-
----
-
-# 🏗️ Lab Environment
-
-| Component | Details |
-|------------|---------|
-| Kubernetes Distribution | K3s |
-| Kubernetes Version | v1.36.x |
-| Operating System | Ubuntu 24.04 LTS |
-| Container Runtime | containerd |
-| Cloud Platform | Google Cloud Platform (GCP) |
-| Cluster Type | Single Node Control Plane |
+Every scenario follows the same loop: **observe → collect evidence (events, describe, logs) → find root cause → fix → verify → document**.
 
 ---
 
-# 📚 Labs Covered
+## What I found (highlights)
 
-| Lab | Topic | Status |
-|-----|-------|:------:|
-| Lab 01 | Kubernetes First Deployment | ✅ |
-| Lab 02 | Services | ✅ |
-| Lab 03 | ConfigMaps | ✅ |
-| Lab 04 | Secrets | ✅ |
-| Lab 05 | Persistent Volumes & Persistent Volume Claims | ✅ |
-| Lab 06 | StatefulSets | ✅ |
-| Lab 07 | Resource Requests & Limits | ✅ |
-| Lab 08 | Jobs & CronJobs | ✅ |
-| Lab 09 | Multi-Container Pods | ✅ |
-| Lab 10 | Init Containers | ✅ |
-| Lab 11 | Namespaces | ✅ |
-| Lab 12 | RBAC | ✅ |
-| Lab 13 | Production Troubleshooting | ✅ |
+- **OOMKilled is the kernel, not Kubernetes.** A pod with a 128Mi limit tried to allocate ~300MB and was killed with reason `OOMKilled`, exit code `137` (128 + SIGKILL), then went into CrashLoopBackOff. [Lab 07](labs/lab-07-resource-management/observations.md) · [screenshot](labs/lab-07-resource-management/screenshots/04.oom-killed.png)
+- **A PVC can be Pending for two very different reasons.** The static PVC stayed Pending because of a StorageClass mismatch (fixed with `storageClassName: ""`). The dynamic one was Pending *by design*: `local-path` uses `WaitForFirstConsumer`, so the volume is only created once a pod is scheduled. Data written to the volume survived pod deletion. [Lab 05](labs/lab-05-persistent-volumes/observations.md) · [screenshot](labs/lab-05-persistent-volumes/screenshots/08-data-persisted-after-pod-recreation.png)
+- **Default K3s does enforce NetworkPolicy.** Flannel has no policy support, but K3s adds a kube-router-based controller. After the deny policy, `wget` to NGINX failed with `Connection refused`. [Scenario 08](labs/lab-13-production-troubleshooting/scenario-08-network-policy/README.md) · [screenshot](labs/lab-13-production-troubleshooting/scenario-08-network-policy/screenshots/03-connectivity-test.png)
+- **QoS class comes from requests and limits.** No resources gave BestEffort (first to be evicted); requests below limits gave Burstable. [Lab 07](labs/lab-07-resource-management/observations.md)
 
----
+## Study material
 
-# 🚨 Production Troubleshooting (Lab 13)
+| Doc | What |
+|---|---|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Control plane and node components, API request flow, pod lifecycle, scheduling, networking, storage and RBAC flows |
+| [theory/](theory/) | Cluster architecture, `kubectl` request flow, components, basic commands, interview questions |
+| [Lab 13 interview cheat sheet](labs/lab-13-production-troubleshooting/interview-cheatsheet.md) | Troubleshooting questions with model answers |
 
-The final lab focuses on diagnosing and resolving common Kubernetes production failures using a structured troubleshooting methodology similar to real-world Platform Engineering and SRE environments.
-
-### Scenarios Covered
-
-| Scenario | Description |
-|----------|-------------|
-| 01 | CrashLoopBackOff |
-| 02 | ImagePullBackOff |
-| 03 | Pending Pod |
-| 04 | ConfigMap Issues |
-| 05 | Secret Issues |
-| 06 | Liveness & Readiness Probe Failures |
-| 07 | Persistent Volume Issues |
-| 08 | NetworkPolicy Analysis |
-| 09 | Resource Limits & OOMKilled |
-
----
-
-# 🔍 Production Troubleshooting Workflow
-
-Every troubleshooting scenario follows the same engineering methodology.
-
-```text
-Issue Detected
-      │
-      ▼
-Observe Symptoms
-      │
-      ▼
-Collect Evidence
-      │
-      ▼
-Analyze Events & Logs
-      │
-      ▼
-Identify Root Cause
-      │
-      ▼
-Apply Resolution
-      │
-      ▼
-Validate Recovery
-      │
-      ▼
-Document Findings
-```
-
----
-
-# 🛠️ Kubernetes Concepts Covered
-
-## Core Architecture
-
-- Kubernetes Architecture
-- API Server
-- etcd
-- Scheduler
-- Controller Manager
-- kubelet
-- containerd Runtime
-
-## Workloads
-
-- Pods
-- ReplicaSets
-- Deployments
-- StatefulSets
-- Jobs
-- CronJobs
-- Init Containers
-- Multi-Container Pods
-
-## Networking
-
-- Services
-- DNS
-- NetworkPolicies
-
-## Configuration
-
-- ConfigMaps
-- Secrets
-
-## Storage
-
-- Persistent Volumes (PV)
-- Persistent Volume Claims (PVC)
-- StorageClasses
-
-## Security
-
-- Namespaces
-- RBAC
-
-## Operations
-
-- Resource Requests & Limits
-- Kubernetes Events
-- Container Logs
-- Production Troubleshooting
-- Root Cause Analysis (RCA)
-
----
-
-# 📂 Repository Structure
-
-```text
-01-kubernetes-foundation/
-│
-├── README.md
-└── labs/
-    ├── lab-01-first-deployment/
-    ├── lab-02-services/
-    ├── lab-03-configmaps/
-    ├── lab-04-secrets/
-    ├── lab-05-persistent-volumes/
-    ├── lab-06-statefulsets/
-    ├── lab-07-resource-management/
-    ├── lab-08-jobs-cronjobs/
-    ├── lab-09-multi-container-pods/
-    ├── lab-10-init-containers/
-    ├── lab-11-namespaces/
-    ├── lab-12-rbac/
-    └── lab-13-production-troubleshooting/
-```
-
----
-
-# 💻 Frequently Used Commands
+## Commands I used most when debugging
 
 ```bash
-kubectl get pods
-kubectl describe pod <pod-name>
-kubectl logs <pod-name>
-
-kubectl get deployments
-kubectl get services
-
-kubectl get configmaps
-kubectl get secrets
-
-kubectl get pv
-kubectl get pvc
-
-kubectl get namespaces
-
-kubectl get events --sort-by=.metadata.creationTimestamp
-
-kubectl top pods
-kubectl top nodes
+kubectl get pods -o wide                                   # status, restarts, node
+kubectl describe pod <pod>                                 # events at the bottom
+kubectl get events --sort-by=.lastTimestamp                # cluster timeline
+kubectl get events --field-selector involvedObject.name=<pod>
+kubectl logs <pod> --previous                              # logs of the crashed container
+kubectl get pod <pod> -o jsonpath='{.status.containerStatuses[0].lastState}'
+kubectl auth can-i delete pods --as=system:serviceaccount:default:pod-reader
+kubectl get pvc,pv,storageclass                            # storage chain
+kubectl top pods && kubectl top nodes                      # live usage (metrics-server)
 ```
 
 ---
 
-# 🎯 Skills Developed
+## Next
 
-After completing this module, you will have practical experience with:
-
-- Kubernetes architecture
-- Container orchestration
-- Application deployments
-- Service discovery
-- Configuration management
-- Secret management
-- Persistent storage
-- Stateful workloads
-- Namespace isolation
-- RBAC fundamentals
-- Resource optimization
-- Production troubleshooting
-- Kubernetes operational best practices
-- Root Cause Analysis (RCA)
-
----
-
-# 🎤 Interview Topics Covered
-
-This module prepares you for interview questions on:
-
-- Kubernetes Architecture
-- Pods
-- Deployments
-- ReplicaSets
-- Services
-- ConfigMaps
-- Secrets
-- StatefulSets
-- Persistent Volumes
-- Persistent Volume Claims
-- StorageClasses
-- Jobs & CronJobs
-- Namespaces
-- RBAC
-- Resource Requests & Limits
-- CrashLoopBackOff
-- ImagePullBackOff
-- Pending Pods
-- NetworkPolicies
-- Kubernetes Events
-- Production Troubleshooting
-
----
-
-# 🚀 Production Best Practices
-
-- Use declarative YAML manifests.
-- Separate configuration using ConfigMaps.
-- Store sensitive data in Secrets.
-- Configure meaningful Resource Requests and Limits.
-- Use Liveness and Readiness Probes appropriately.
-- Review Kubernetes Events before making changes.
-- Analyze application logs before restarting Pods.
-- Apply the Principle of Least Privilege using RBAC.
-- Validate storage before deploying stateful workloads.
-- Perform Root Cause Analysis (RCA) after every production incident.
-- Document findings to improve operational knowledge.
-
----
-
-# 📈 Learning Outcomes
-
-After completing this module, you will be able to:
-
-- Deploy and manage Kubernetes applications confidently.
-- Understand interactions between Kubernetes control plane components.
-- Troubleshoot production issues using a structured methodology.
-- Diagnose scheduling, networking, storage, and resource problems.
-- Analyze Kubernetes Events, logs, and workload health.
-- Build a strong operational foundation for Helm, OpenShift, GitOps, Infrastructure as Code (Terraform), Ansible, and Observability.
-
----
-
-# 🔗 Next Module
-
-➡️ **02 – Helm Package Management**
-
-The next module focuses on packaging, templating, versioning, dependency management, and production deployment of Kubernetes applications using Helm charts.
-
----
-
-# 🏁 Conclusion
-
-The **Kubernetes Foundation** module establishes the core operational knowledge required for modern Platform Engineering. Through **13 hands-on labs**, **9 production troubleshooting scenarios**, and comprehensive documentation, this module emphasizes practical implementation, operational excellence, and systematic troubleshooting.
-
-It provides a solid foundation for advanced topics such as **Helm, OpenShift, GitOps, Terraform, Ansible, Observability, and AI Infrastructure**, while also serving as a strong portfolio to demonstrate real-world Kubernetes skills during senior Platform Engineer interviews.
+- **[Module 02 — Incident drills](../02-incident-drills/README.md)** 🟢 timed live-outage drills on multi-node clusters, with my own RCAs
+- **Module 03 — Helm** ⏳ charts, values, templating, releases and rollbacks

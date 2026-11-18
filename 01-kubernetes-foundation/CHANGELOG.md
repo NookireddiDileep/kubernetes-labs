@@ -6,6 +6,17 @@ This changelog follows the principles of semantic versioning and documents major
 
 ---
 
+## [v1.0.1] - 2026-11-18
+
+### 📝 Documentation fixes
+
+- Module README rewritten: lab table and folder list now match the real labs (08 Health Checks, 12 Ingress; Multi-Container Pods and Init Containers were never part of this module and are removed), every lab and scenario linked, exact environment and evidence counts, findings with screenshot links.
+- Corrected the v1.0.0 lab list below to match the labs actually delivered.
+- Scenario 08 (NetworkPolicy): corrected the claim that default K3s does not enforce NetworkPolicies. K3s ships an embedded kube-router network policy controller, and the lab's own screenshot shows traffic blocked (`Connection refused`). Lab 13 observations updated to match.
+- Next module corrected: 02 is Incident Drills, Helm is 03.
+
+---
+
 ## [v1.0.0] - 2026-07-26
 
 ### 🎉 Initial Release
@@ -23,11 +34,11 @@ The Kubernetes Foundation module has been completed.
 - ✅ Lab 05 – Persistent Volumes & Persistent Volume Claims
 - ✅ Lab 06 – StatefulSets
 - ✅ Lab 07 – Resource Requests & Limits
-- ✅ Lab 08 – Jobs & CronJobs
-- ✅ Lab 09 – Multi-Container Pods
-- ✅ Lab 10 – Init Containers
-- ✅ Lab 11 – Namespaces
-- ✅ Lab 12 – RBAC
+- ✅ Lab 08 – Health Checks (liveness, readiness, startup probes)
+- ✅ Lab 09 – Jobs & CronJobs
+- ✅ Lab 10 – RBAC
+- ✅ Lab 11 – Namespaces & Resource Quotas
+- ✅ Lab 12 – Ingress
 - ✅ Lab 13 – Production Troubleshooting
 
 ---
@@ -80,8 +91,9 @@ Added comprehensive documentation including:
 - StorageClasses
 - Jobs
 - CronJobs
-- Init Containers
-- Multi-Container Pods
+- Health Probes
+- Ingress (Traefik)
+- ResourceQuotas & LimitRanges
 - Namespaces
 - RBAC
 - Resource Requests & Limits
@@ -134,16 +146,16 @@ Prepared documentation covering:
 | Architecture Documents | **1** |
 | Interview Guides | **1** |
 | README Files | **15+** |
-| Screenshots | **100+** |
+| Screenshots | **128** |
 | Kubernetes Concepts Covered | **20+** |
 
 ---
 
 ### 🚀 Next Milestone
 
-The next module in the roadmap is:
+The next modules in the roadmap are **02 – Incident Drills** (ongoing) and then:
 
-**02 – Helm Package Management**
+**03 – Helm Package Management**
 
 Upcoming topics include:
 
@@ -168,6 +180,6 @@ Upcoming topics include:
 
 **Version:** v1.0.0
 
-**State:** Production Ready
+**State:** Complete
 
 **Next Target:** Helm Package Management
