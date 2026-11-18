@@ -1,15 +1,17 @@
-# GitHub SSH Configuration
+# 03 — GitHub SSH Access
 
 ## Objective
 
-Configure passwordless Git authentication using SSH.
+Push lab work from the VM to GitHub without passwords or tokens.
 
 ## Steps
 
-1. Generate SSH key
-2. Copy public key
-3. Add key to GitHub
-4. Verify SSH connectivity
+```bash
+ssh-keygen -t ed25519 -C "<github-email>"     # accept the default path, set a passphrase
+cat ~/.ssh/id_ed25519.pub                     # copy this public key
+```
+
+Add the key in GitHub → **Settings → SSH and GPG keys → New SSH key**.
 
 ## Verification
 
@@ -17,14 +19,19 @@ Configure passwordless Git authentication using SSH.
 ssh -T git@github.com
 ```
 
-Expected:
+Expected output (with your own username):
 
 ```text
-Hi dileepnookireddi!
-You've successfully authenticated,
-but GitHub does not provide shell access.
+Hi <github-username>! You've successfully authenticated, but GitHub does not provide shell access.
 ```
 
-## Result
+Then clone over SSH:
 
-GitHub authentication completed successfully.
+```bash
+git clone git@github.com:NookireddiDileep/kubernetes-labs.git
+```
+
+## Notes
+
+- Only the **public** key (`.pub`) ever leaves the VM.
+- If `ssh -T` says `Permission denied (publickey)`, see [troubleshooting](troubleshooting.md#issue-1-github-ssh-authentication-failed).

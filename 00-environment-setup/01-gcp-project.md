@@ -1,35 +1,40 @@
-# GCP Project Setup
+# 01 — GCP Project, Billing and Budget
 
 ## Objective
 
-Create a cloud environment for Platform Engineering labs.
+A dedicated Google Cloud project for the labs, so costs, permissions and clean-up stay separate from anything else.
 
-## Platform
+## Steps
 
-Google Cloud Platform
+1. **Create a project** (Console → IAM & Admin → Create project, or CLI):
 
-## VM Configuration
+   ```bash
+   gcloud projects create <project-id> --name="kubernetes-labs"
+   gcloud config set project <project-id>
+   ```
 
-| Parameter | Value |
-|-----------|-------|
-| OS | Ubuntu 24.04.4 LTS |
-| vCPU | 4 |
-| RAM | 16 GB |
-| Disk | 100 GB |
-| Region | Asia South |
-| Machine Type | e2-standard-4 |
+2. **Link billing** (Console → Billing → link the project to a billing account).
+3. **Enable the Compute Engine API:**
+
+   ```bash
+   gcloud services enable compute.googleapis.com
+   ```
+
+4. **Set a budget alert** (Console → Billing → Budgets & alerts) with email alerts at 50%, 90% and 100% of a monthly amount you are happy to spend.
+5. **Set the default region:**
+
+   ```bash
+   gcloud config set compute/region asia-south1
+   ```
 
 ## Verification
 
-Commands executed:
-
 ```bash
-hostnamectl
-lsb_release -a
-free -h
-df -h
-nproc
-ip addr show
+gcloud config list                 # account, project, region
+gcloud services list --enabled | grep compute
 ```
 
-Environment verified successfully.
+## Notes
+
+- The project ID is not published here; use your own.
+- Deleting the project is the fastest full clean-up: it removes the VM, disk and firewall rules together.
