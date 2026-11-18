@@ -1,12 +1,14 @@
 # Module 00 — Environment Setup
 
-How the lab cluster behind every module in this repo was built: a single-node **K3s** cluster on an Ubuntu VM in Google Cloud. The goal is that anyone, including future me, can rebuild it from these pages.
+How the lab cluster behind modules 00–01 was built: a single-node **K3s** cluster on an Ubuntu VM in Google Cloud. These pages are written as a **rebuild guide**, so anyone, including future me, can recreate it.
+
+> **Status: retired (Nov 2026).** The VM was deleted after module 01 was finished. The facts below come from the cluster while it ran (see the evidence link); the commands rebuild the same setup.
 
 ## The cluster
 
 | | |
 |---|---|
-| **Cloud** | Google Cloud, region `asia-south1` (Mumbai) |
+| **Cloud** | Google Cloud, region `asia-south1` (Mumbai, from the node's subnet) |
 | **VM** | `platform-engineer-lab`, `e2-standard-4` (4 vCPU, 16 GB RAM), 100 GB disk |
 | **OS** | Ubuntu 24.04.4 LTS, kernel `6.17.0-1021-gcp` |
 | **Kubernetes** | K3s `v1.36.2+k3s1`, single server node (runs the control plane and workloads) |
@@ -24,17 +26,16 @@ How the lab cluster behind every module in this repo was built: a single-node **
 | 03 | [GitHub SSH access](03-github-ssh.md) | ✅ |
 | 04 | [Linux preparation and Git identity](04-linux-preparation.md) | ✅ |
 | 05 | [K3s installation, kubeconfig and validation](05-k3s-installation.md) | ✅ Cluster built and validated |
+| 06 | Tear-down | ✅ VM deleted, Nov 2026 |
 | — | [Troubleshooting log](troubleshooting.md) | Ongoing |
 
 Helm is installed in module 03, not here.
 
 ## Security and cost baseline
 
-- **Access:** SSH only (ideally via IAP). The Kubernetes API (`6443`) and NodePorts (`30000–32767`) are **not** opened to the internet; `kubectl` runs on the VM.
-- **Cost:** the VM is stopped after every session. The persistent disk keeps the cluster, so K3s comes back on the next start. A budget alert guards against surprises.
+- **Access:** `kubectl` ran on the VM itself over SSH, so the Kubernetes API (`6443`) and NodePorts never needed to be exposed. For a rebuild, keep it that way (see [02](02-vm-creation.md#firewall)).
+- **Cost:** the VM was stopped between sessions (only the disk is billed while stopped) and deleted when the module was done, which stops all charges.
 
-## Still to add
+## Not recorded before tear-down
 
-- [ ] Exact zone (e.g. `asia-south1-a`) and boot-disk type
-- [ ] Screenshot of `kubectl get pods -A` right after install (all system pods `Running`)
-- [ ] Any K3s problems hit during setup, in [troubleshooting.md](troubleshooting.md)
+The exact zone, boot-disk type and a `kubectl get pods -A` capture were not saved before the VM was deleted. The rebuild commands use placeholders for these. On the next rebuild, record them here.

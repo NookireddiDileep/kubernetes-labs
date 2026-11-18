@@ -55,7 +55,17 @@ df -h /              # ~100 GB root disk
 ip -br addr          # private IP on the default VPC
 ```
 
-## Cost control
+## Tear-down
+
+When the labs are finished, delete the VM and its disk so nothing is billed:
+
+```bash
+gcloud compute instances delete platform-engineer-lab --zone=<zone>   # boot disk is deleted with it by default
+```
+
+The original VM was deleted this way in Nov 2026, after module 01.
+
+## Cost control while the VM exists
 
 - Stop the VM after each session: `gcloud compute instances stop platform-engineer-lab --zone=<zone>`. Billing for vCPU/RAM stops; only the disk is charged.
 - The persistent disk keeps everything. K3s runs as a systemd service and starts on boot.

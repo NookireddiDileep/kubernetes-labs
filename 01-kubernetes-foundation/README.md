@@ -1,11 +1,11 @@
 # ☸️ Module 01 — Kubernetes Foundation
 
-**13 hands-on labs and 9 break-and-fix troubleshooting scenarios on a K3s cluster I built and run myself.** Every lab has its manifests, validation screenshots and an `observations.md` with what I saw, what broke and how I fixed it.
+**13 hands-on labs and 9 break-and-fix troubleshooting scenarios on a K3s cluster I built and ran myself.** Every lab has its manifests, validation screenshots and an `observations.md` with what I saw, what broke and how I fixed it.
 
 | | |
 |---|---|
 | **Status** | ✅ Complete (v1.0.0, July 2026) · [changelog](CHANGELOG.md) |
-| **Cluster** | Single-node K3s `v1.36.2+k3s1`; the one server node also runs workloads |
+| **Cluster** | Single-node K3s `v1.36.2+k3s1`; the one server node also runs workloads. VM retired after this module; [rebuild guide](../00-environment-setup/README.md) |
 | **Platform** | Ubuntu 24.04 LTS VM on Google Cloud, containerd runtime |
 | **Networking** | Flannel CNI, K3s embedded network policy controller, Traefik ingress |
 | **Storage** | `local-path` provisioner (default StorageClass) |

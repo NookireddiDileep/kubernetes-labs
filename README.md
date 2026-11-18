@@ -6,7 +6,7 @@ Every lab is done on a cluster I built and run myself, with manifests, validatio
 
 | | |
 |---|---|
-| **Environment** | Single-node **K3s** on an Ubuntu 24.04 VM in Google Cloud (containerd runtime) |
+| **Environment** | Single-node **K3s** on an Ubuntu 24.04 VM in Google Cloud (containerd runtime); VM retired Nov 2026 after module 01, [rebuild guide](00-environment-setup/README.md) kept |
 | **Built by** | Nookireddi Dileep, senior Linux/HPC infrastructure engineer moving into Kubernetes/OpenShift platform engineering |
 | **Status** | Module 01 ✅ complete · Module 02 (incident drills) 🟢 ongoing · more planned |
 
@@ -18,7 +18,7 @@ Every lab is done on a cluster I built and run myself, with manifests, validatio
 
 | # | Module | What's inside | Status |
 |---|---|---|---|
-| 00 | [Environment setup](00-environment-setup/README.md) | GCP VM, Linux preparation, Git/SSH, K3s installation, setup troubleshooting | ✅ |
+| 00 | [Environment setup](00-environment-setup/README.md) | GCP VM, Linux preparation, Git/SSH, K3s installation, tear-down; written as a rebuild guide | ✅ VM retired |
 | 01 | [Kubernetes foundation](01-kubernetes-foundation/README.md) | 13 hands-on labs + 9 production troubleshooting scenarios | ✅ |
 | 02 | [Incident drills](02-incident-drills/README.md) | Timed live-outage drills on multi-node clusters, with my own RCAs | 🟢 Ongoing |
 | 03 | Helm package management | Charts, values, templating, releases and rollbacks | ⏳ Planned |

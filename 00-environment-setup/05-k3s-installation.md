@@ -4,6 +4,8 @@
 
 Install a single-node Kubernetes cluster on the VM, run `kubectl` as a normal user, and prove the cluster is healthy before any lab starts.
 
+> The original cluster ran from July to November 2026 and has been deleted. The **Validation** result below is from that cluster; everything else is the guide to rebuild it.
+
 ## Why K3s?
 
 | Need | How K3s meets it |
@@ -51,7 +53,7 @@ kubectl get storageclass         # local-path (default)
 kubectl top nodes                # metrics-server answers
 ```
 
-Result on this cluster: node `platform-engineer-lab` **Ready**, role `control-plane`, `v1.36.2+k3s1`, Ubuntu 24.04.4 LTS, kernel `6.17.0-1021-gcp`, containerd `2.3.2-k3s2`. [Screenshot](../01-kubernetes-foundation/labs/lab-01-first-deployment/screenshots/01-cluster-nodes.png)
+Result on the original cluster: node `platform-engineer-lab` **Ready**, role `control-plane`, `v1.36.2+k3s1`, Ubuntu 24.04.4 LTS, kernel `6.17.0-1021-gcp`, containerd `2.3.2-k3s2`. [Screenshot](../01-kubernetes-foundation/labs/lab-01-first-deployment/screenshots/01-cluster-nodes.png)
 
 Expected `kube-system` pods on a default install: `coredns`, `local-path-provisioner`, `metrics-server`, `traefik`, `svclb-traefik-*`, and the completed `helm-install-traefik*` jobs.
 
