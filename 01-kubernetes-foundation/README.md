@@ -67,6 +67,8 @@ Every scenario follows the same loop: **observe → collect evidence (events, de
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Control plane and node components, API request flow, pod lifecycle, scheduling, networking, storage and RBAC flows |
 | [theory/](theory/) | Cluster architecture, `kubectl` request flow, components, basic commands, interview questions |
 | [Lab 13 interview cheat sheet](labs/lab-13-production-troubleshooting/interview-cheatsheet.md) | Troubleshooting questions with model answers |
+| [Pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md) | Every pod failure state, plain language to L4; [upstream translation and scenario map](labs/lab-13-production-troubleshooting/README.md#upstream-kubernetes-translation-of-the-pod-failure-states-decoder) |
+| [Reference library](../reference/README.md) | Upstream Kubernetes concept notes, starting with [R01 networking end to end](../reference/R01-networking-end-to-end.md) |
 
 ## Commands I used most when debugging
 

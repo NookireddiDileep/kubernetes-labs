@@ -25,6 +25,15 @@ Every lab is done on a cluster I built and run myself, with manifests, validatio
 | 04 | Cluster internals & CKA track | kubeadm multi-node cluster, control plane, etcd backup/restore, upgrades | ⏳ Planned |
 | 05 | Networking deep dive | CNI, Services/kube-proxy, DNS, NetworkPolicies, Ingress/Gateway API | ⏳ Planned |
 
+## Reference library
+
+Concept notes on upstream Kubernetes, from plain language to senior/architect depth, alongside the labs. See the [library plan](reference/README.md) for all planned topics and how they split across my repos.
+
+| Note | What |
+|---|---|
+| [R01 Networking end to end](reference/R01-networking-end-to-end.md) | Pods and CNI, Services, kube-proxy modes and the packet walk, CoreDNS and `ndots`, Ingress → Gateway API, NetworkPolicy, troubleshooting, 10 L4 questions |
+| [Pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md) (openshift-lab-records) | Every pod failure state; [upstream translation](01-kubernetes-foundation/labs/lab-13-production-troubleshooting/README.md#upstream-kubernetes-translation-of-the-pod-failure-states-decoder) in Lab 13 |
+
 ## Module 01: Kubernetes foundation (labs)
 
 | Lab | Topic |

@@ -20,6 +20,18 @@ Timed break-fix drills on **live, multi-node Kubernetes clusters** with real pro
 
 <!-- Add a row per drill. Write a full RCA (TEMPLATE.md) for the ones worth keeping: DRILL-NNN-<slug>.md -->
 
+## Planned drills (gaps from the pod failure states decoder)
+
+States the single-node module 01 couldn't show. Each becomes a drill once a multi-node cluster is available; mapped to the [pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md).
+
+| Planned drill | Decoder section | Status |
+|---|---|---|
+| RWO volume `Multi-Attach` after a node is shut down; fencing | §6 ContainerCreating | ⏳ |
+| Init container waiting forever on a dependency | §9 Init states | ⏳ |
+| Eviction under ephemeral-storage pressure | §14 Evicted | ⏳ |
+| Stuck Terminating: custom finalizer, and a pod on an unreachable node | §15 Terminating | ⏳ |
+| Node lost: rescheduling timing and StatefulSet safety | §16 Unknown / node lost | ⏳ |
+
 ## What I'm tracking
 
 - **Time to root cause** for each area (target: under 15 minutes)
