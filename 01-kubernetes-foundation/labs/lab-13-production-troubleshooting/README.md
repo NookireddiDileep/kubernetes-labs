@@ -225,11 +225,44 @@ By completing this lab, you will be able to:
 
 ---
 
+# Upstream Kubernetes translation of the pod failure states decoder
+
+The full troubleshooting map for every pod failure state (plain language → mechanism → fix → L4 interview angle) lives in one place: the [pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md) in my openshift-lab-records repo. It's written with an OpenShift lens; this table maps it to upstream Kubernetes and to the scenarios in this lab.
+
+**Scenario → decoder section**
+
+| Scenario here | Decoder section |
+|---|---|
+| [01 CrashLoopBackOff](scenario-01-crashloop/README.md) | [§10 CrashLoopBackOff](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#10-crashloopbackoff) |
+| [02 ImagePullBackOff](scenario-02-imagepullbackoff/README.md) | [§7 ErrImagePull / ImagePullBackOff](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#7-errimagepull--imagepullbackoff) |
+| [03 Pending pod](scenario-03-pending-pod/README.md) | [§5 Pending](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#5-pending) |
+| [04 ConfigMap](scenario-04-configmap/README.md), [05 Secret](scenario-05-secret/README.md) | [§8 CreateContainerConfigError](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#8-createcontainerconfigerror--createcontainererror) |
+| [06 Probe failures](scenario-06-liveness-readiness/README.md) | [§10 CrashLoopBackOff](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#10-crashloopbackoff) (liveness) and [§12 Running but not Ready](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#12-running-but-not-ready-01) |
+| [07 PVC Pending](scenario-07-persistent-volume/README.md) | [§5 Pending](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#5-pending) (unbound PVC) |
+| [08 NetworkPolicy](scenario-08-network-policy/README.md) | Not a pod state: see [R01 networking](../../../reference/R01-networking-end-to-end.md#7-networkpolicy) |
+| [09 OOMKilled](scenario-09-resource-limits/README.md) | [§11 OOMKilled](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md#11-oomkilled) |
+
+**OpenShift wording → upstream K3s**
+
+| The decoder says | On upstream Kubernetes / K3s |
+|---|---|
+| `oc …` | `kubectl …` (same verbs) |
+| SCC rejection, random UID, `restricted-v2`, `anyuid` | No SCCs. Pod Security Admission namespace labels (`privileged` / `baseline` / `restricted`) and `securityContext`; images often run as root unless you restrict them |
+| `oc debug node/<n>` → `chroot /host` → `crictl` | SSH to the node, `sudo k3s crictl …` (containerd) |
+| CRI-O logs: `journalctl -u crio` | `journalctl -u k3s` (K3s runs kubelet and containerd inside its own service) |
+| Router / Route returns 503 | Ingress controller (Traefik in K3s) or Gateway returns 404/503 |
+| `image.config.openshift.io` (trusted CAs, mirrors) | containerd `registries.yaml` (`/etc/rancher/k3s/registries.yaml`) |
+| ODF / vSphere CSI | `local-path` provisioner (`WaitForFirstConsumer`) |
+| OVN-Kubernetes | Flannel (VXLAN) + kube-router network policy controller |
+
+---
+
 # 📚 Related Documentation
 
 - **observations.md** – Summary of findings from each troubleshooting scenario.
 - **interview-cheatsheet.md** – Interview questions and quick revision notes.
 - **Scenario README files** – Detailed walkthroughs for each production issue.
+- **[Pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md)** – the full troubleshooting map these scenarios plug into (see the translation table above).
 
 ---
 
