@@ -14,6 +14,18 @@ Every lab is done on a cluster I built and run myself, with manifests, validatio
 
 ---
 
+## 🧭 Start here: read in this order
+
+| Step | Read | Why first |
+|---|---|---|
+| **1. Know your goal** | [OpenShift career ladder: L1 to Architect](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-career-ladder.md) (openshift-lab-records) | The levels, roles and skills from L1 to architect, and where CKA, CKAD and CKS fit |
+| **2. Understand the platform** | **[Kubernetes architecture](01-kubernetes-foundation/ARCHITECTURE.md)** | How Kubernetes is built end to end: control plane and node components, the API request flow, pod lifecycle, scheduling, networking, storage and RBAC. Every lab here builds on it |
+| **3. Then the labs and references** | [Modules](#modules) and the [reference library](#reference-library) | Hands-on practice and deeper notes, topic by topic |
+
+Going on to OpenShift? Its companion deep dive is [OpenShift architecture](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-architecture.md), and [OpenShift vs Kubernetes architecture](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-vs-kubernetes-architecture.md) compares the two.
+
+---
+
 ## Modules
 
 | # | Module | What's inside | Status |
@@ -31,6 +43,7 @@ Concept notes on upstream Kubernetes, from plain language to senior/architect de
 
 | Note | What |
 |---|---|
+| **[Kubernetes architecture](01-kubernetes-foundation/ARCHITECTURE.md)** | **Start here.** Control plane and node components, API request flow, pod lifecycle, Deployments and ReplicaSets, scheduling, Services and DNS, storage, probes, RBAC |
 | [R01 Networking end to end](reference/R01-networking-end-to-end.md) | Pods and CNI, Services, kube-proxy modes and the packet walk, CoreDNS and `ndots`, Ingress → Gateway API, NetworkPolicy, troubleshooting, 10 L4 questions |
 | [Pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md) (openshift-lab-records) | Every pod failure state; [upstream translation](01-kubernetes-foundation/labs/lab-13-production-troubleshooting/README.md#upstream-kubernetes-translation-of-the-pod-failure-states-decoder) in Lab 13 |
 | [OpenShift career ladder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-career-ladder.md) (openshift-lab-records) | Roles and skills from L1 to architect; where CKA, CKAD and CKS fit alongside the OpenShift path |
