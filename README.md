@@ -48,6 +48,20 @@ Concept notes on upstream Kubernetes, from plain language to senior/architect de
 | [Pod failure states decoder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/pod-failure-states-decoder.md) (openshift-lab-records) | Every pod failure state; [upstream translation](01-kubernetes-foundation/labs/lab-13-production-troubleshooting/README.md#upstream-kubernetes-translation-of-the-pod-failure-states-decoder) in Lab 13 |
 | [OpenShift career ladder](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-career-ladder.md) (openshift-lab-records) | Roles and skills from L1 to architect; where CKA, CKAD and CKS fit alongside the OpenShift path |
 
+## Certifications and these labs
+
+How the work in this repo lines up with the CNCF Kubernetes certifications. For **when** to take each one alongside the OpenShift path, see the [career ladder's Kubernetes foundation section](https://github.com/NookireddiDileep/openshift-lab-records/blob/main/reference/openshift-career-ladder.md#kubernetes-foundation).
+
+| Certification | Format | What it proves | Labs here that prepare for it |
+|---|---|---|---|
+| KCNA | Multiple choice | Cloud-native and Kubernetes concepts | [Kubernetes architecture](01-kubernetes-foundation/ARCHITECTURE.md), Module 01 labs 01–12 |
+| KCSA | Multiple choice | Kubernetes and cloud-native security concepts | Lab 10 (RBAC), lab 11 (namespaces, quotas), NetworkPolicy in lab 13 |
+| CKAD | Hands-on | Building and running apps on Kubernetes | Module 01 labs 01–09: Deployments, Services, ConfigMaps, Secrets, storage, StatefulSets, resources, probes, Jobs |
+| **CKA** | Hands-on | Cluster administration and troubleshooting | Module 01 (RBAC, namespaces, storage, ingress, **lab 13 troubleshooting**) + Module 04 (kubeadm, etcd backup/restore, upgrades, planned) + Module 05 (networking, planned) |
+| CKS | Hands-on, requires a current CKA | Kubernetes security | Lab 10 RBAC, NetworkPolicy in lab 13; a security module is planned |
+
+Holding all five at the same time earns CNCF's **Kubestronaut** title.
+
 ## Module 01: Kubernetes foundation (labs)
 
 | Lab | Topic |
